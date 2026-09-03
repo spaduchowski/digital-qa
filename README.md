@@ -59,7 +59,12 @@ When it sees a fragment slot it adds a **Fragments** section listing the spec sh
 
 The spec sheet stays loaded between emails on purpose. One sheet covers a whole job, and some jobs are thirty state variants.
 
-That is only safe while the sheet and the email are the same job. When the job code in the footer does not match the Veeva code on the sheet, the panel says **WRONG SHEET**, names both codes, and compares nothing. Load the sheet for that job, or press **Compare anyway** if you know better.
+That is only safe while the tool can prove the sheet and the email are the same job, so it checks the job code in the footer against the Veeva code on the sheet and refuses to compare unless they agree.
+
+- **WRONG SHEET**, red. The codes disagree. This sheet is for another job.
+- **UNCONFIRMED**, amber. The email carries no job code, so the tool cannot tell whether the sheet applies. About one email in twelve.
+
+In both cases nothing is compared and no check is shown, because a confident answer against the wrong sheet is worse than no answer. Load the sheet for that job, or press **Compare anyway** if you know better. Agreeing once does not carry over to a different job.
 
 ## Alt text and title tags
 
