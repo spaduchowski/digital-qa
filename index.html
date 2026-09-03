@@ -33,10 +33,6 @@
   table.checks td:first-child { font-weight: 600; white-space: nowrap; }
   table.checks td .badge { font-weight: 700; }
   table.checks td:last-child { color: #64748b; font-family: Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
-  .figs { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
-  .fig { flex: 1 1 130px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; }
-  .fig b { display: block; font-size: 22px; font-family: Menlo, Consolas, monospace; font-weight: 500; color: #0f172a; }
-  .fig span { font-size: 12.5px; color: #64748b; line-height: 1.4; display: block; margin-top: 2px; }
   @media (max-width: 560px) { table.checks td:last-child { white-space: normal; } }
 </style>
 </head>
@@ -208,26 +204,6 @@
       <li><span class="badge grey">GREY DASHED</span> decorative by design.</li>
     </ul>
     <p>Hover any image for its alt text, click to pin, <strong>Copy</strong> puts it on your clipboard.</p>
-  </div>
-
-  <div class="card">
-    <h2>Built against real jobs</h2>
-    <p>Every rule was measured against the work in hand before it was written, rather than assumed.</p>
-    <div class="figs">
-      <div class="fig"><b>43</b><span>jobs with both a build and a sheet</span></div>
-      <div class="fig"><b>166</b><span>email build files behind them</span></div>
-      <div class="fig"><b>52</b><span>email spec sheets analysed</span></div>
-    </div>
-    <p>A sample of what the measurements decided:</p>
-    <table class="checks">
-      <tr><th>Measured</th><th>What it decided</th><th></th></tr>
-      <tr><td>9 of 52</td><td>sheets carry UTM columns, so a build adding its own tags can never count as a mismatch</td><td></td></tr>
-      <tr><td>4 of 491</td><td>image links have no alt text, rare enough that flagging it is signal rather than noise</td><td></td></tr>
-      <tr><td>16 of 178</td><td>builds carry no job code at all, which is why the unconfirmed state exists</td><td></td></tr>
-      <tr><td>23 cells</td><td>across 8 sheets write a URL with no https, invisible to the tool until it was fixed</td><td></td></tr>
-      <tr><td>30 files</td><td>on one job share a single link set, which is why what you mark done is remembered per job rather than per file</td><td></td></tr>
-    </table>
-    <p>Four genuine defects surfaced during testing, in builds that had already been through proofing: a missing preheader where the sheet listed two, a build with no job code anywhere, and two cases of alt text drifting from the approved copy. None had been caught by eye.</p>
   </div>
 
   <div class="card">
