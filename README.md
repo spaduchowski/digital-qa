@@ -104,7 +104,7 @@ Images with no alt at all are counted quietly, since a decorative image is allow
 
 The spec sheet is the authority. A green **PASS** means everything the sheet asks for is present in the build and matches. Nothing more is claimed.
 
-- **PASS**, green. Every item on the sheet is there and correct. Green never appears for something the sheet is silent about. If the sheet has no preheader row, the preheader line says so rather than reading as verified.
+- **PASS**, green. Every item on the sheet is there and correct, and you have clicked through the links. Green never appears for something the sheet is silent about, or for a pass you have not finished.
 - **CHECK**, amber. It is all there, but something wants a look.
 - **FAIL**, red. Something the sheet asks for is missing from the build.
 - **NO SPEC**, grey. No sheet loaded yet, so nothing has been compared. Deliberately not green.
@@ -124,6 +124,12 @@ Every row says which side it came from, so you can see at a glance what is cover
 - **Phone, email and in-page links.** Skipped, because no spec sheet covers them.
 - **Subject lines.** They live in the sending platform, not in the HTML.
 - **Whether a destination loads.** No bookmarklet can answer that. A live page and a dead one look identical to it. That is what **Open** is for, and why the done marks exist.
+
+### Amber until you have finished
+
+A link counter sitting at `0 of 10` is amber, not green, even when nothing is wrong. Green would say the pass is complete when it has not started. It turns green when every link is marked done, and the same applies to the fragment counter.
+
+Links with no destination to open, a `{{token}}` resolved at send time for instance, are listed under **Nothing to open** and left out of the count. There is nothing to verify, so requiring a tick would hold the row amber forever.
 
 ### What the counter is
 
