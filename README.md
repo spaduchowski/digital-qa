@@ -67,7 +67,9 @@ The fragment list is a checklist, not just a note. **Toggle the preview to a fra
 
 Only Links is shown, because preheader, tracking and job code belong to the email rather than to a fragment. The rest of the sheet is not judged there either, since a fragment is one piece of the job.
 
-Go back to the email and the Fragments line counts what you have done, `3 of 3 fragment links done`, with a tick beside each one and the file you checked it in.
+You do not have to toggle at all if you would rather not. **Click any row in the Fragments list** and you get the same box: the URL, which fragment holds it, **Open**, **Copy**, **Mark done**, and **Show fragment** to put that fragment on screen.
+
+Either way the Fragments line counts what you have done, `3 of 3 fragment links done`, with a tick beside each one and the file you checked it in.
 
 **If the fragments are not on the page**, for an email opened on its own for example, the section says so and lists what it could not check. Those are not called missing, because the tool cannot know. They are yours to check.
 
