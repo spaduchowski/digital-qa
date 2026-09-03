@@ -24,7 +24,7 @@ Four lines, one per check. A dot says whether it is fine. Click a line to see th
 
 - **Preheader**: the hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and how it compares with the spec sheet. When the sheet lists several approved preheaders, the build only has to carry one of them, and the detail says which one it matched. A build that states a whole variant set, the Veeva ones, has to match the sheet's list in full.
 - **Links**: how many you have marked done, and how many need a look. Open the line for the checklist, split into Not done and Done. Image buttons carry their alt text here too.
-- **Pixel**: one row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a pixel block.
+- **Tracking**: one row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a tracking block.
 - **Job code**: read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, `in email` and `on spec`.
 
 ## Checking links
