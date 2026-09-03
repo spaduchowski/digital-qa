@@ -89,6 +89,35 @@
     <p>Read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, <code>in email</code> and <code>on spec</code>.</p>
   </div>
 
+
+  <div class="card">
+    <h2>What a result means</h2>
+    <p>The spec sheet is the authority. A green <strong>PASS</strong> means everything the sheet asks for is present in the build and matches. Nothing more is claimed.</p>
+    <ul class="legend">
+      <li><span class="badge green">PASS</span> Every item on the sheet is there and correct.</li>
+      <li><span class="badge amber">CHECK</span> It is all there, but something wants a look.</li>
+      <li><span class="badge red">FAIL</span> Something the sheet asks for is missing from the build.</li>
+      <li><span class="badge grey">NO SPEC</span> No sheet loaded yet, so nothing has been compared. Deliberately not green.</li>
+    </ul>
+
+    <h3>Where the link list comes from</h3>
+    <p>The checklist is <strong>every link found in the email</strong>, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot. That is why both directions are covered:</p>
+    <ul>
+      <li><strong>On the sheet, not in the build.</strong> Listed on its own. There is nothing to click, so this is the one thing clicking through can never find.</li>
+      <li><strong>In the build, not on the sheet.</strong> Flagged amber. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.</li>
+    </ul>
+
+    <h3>What is not checked</h3>
+    <ul>
+      <li><strong>Phone, email and in-page links.</strong> Skipped, because no spec sheet covers them.</li>
+      <li><strong>Subject lines.</strong> They live in the sending platform, not in the HTML.</li>
+      <li><strong>Whether a destination loads.</strong> No bookmarklet can answer that. A live page and a dead one look identical to it. That is what <strong>Open</strong> is for, and why the done marks exist.</li>
+    </ul>
+
+    <h3>What the counter is</h3>
+    <p><code>3 of 9 done</code> is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.</p>
+  </div>
+
   <div class="card">
     <h2>Use it on a website</h2>
     <p>Click the <strong>Web</strong> tab. Metadata at the top, every image and graphic outlined by alt text status.</p>

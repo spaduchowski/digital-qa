@@ -49,6 +49,34 @@ Open the **Links** line for the checklist. It is always split into **Not done** 
 
 What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
+## What a result means
+
+The spec sheet is the authority. A green **PASS** means everything the sheet asks for is present in the build and matches. Nothing more is claimed.
+
+- **PASS**, green. Every item on the sheet is there and correct.
+- **CHECK**, amber. It is all there, but something wants a look.
+- **FAIL**, red. Something the sheet asks for is missing from the build.
+- **NO SPEC**, grey. No sheet loaded yet, so nothing has been compared. Deliberately not green.
+
+### Where the link list comes from
+
+The checklist is **every link found in the email**, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot.
+
+That is why both directions are covered:
+
+- **On the sheet, not in the build.** Listed on its own. There is nothing to click, so this is the one thing clicking through can never find.
+- **In the build, not on the sheet.** Flagged amber. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.
+
+### What is not checked
+
+- **Phone, email and in-page links.** Skipped, because no spec sheet covers them.
+- **Subject lines.** They live in the sending platform, not in the HTML.
+- **Whether a destination loads.** No bookmarklet can answer that. A live page and a dead one look identical to it. That is what **Open** is for, and why the done marks exist.
+
+### What the counter is
+
+`3 of 9 done` is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.
+
 ## Use it on a website
 
 Click the **Web** tab. Metadata at the top, every image and graphic outlined by alt text status.
