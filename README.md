@@ -155,6 +155,16 @@ Two things it is careful about. It says links were **marked done by the proofer*
 
 It will not produce a report when nothing has been compared, which is any of **NO SPEC**, **WRONG SHEET** or **UNCONFIRMED**.
 
+## When something looks wrong
+
+At the foot of the panel, **Report a problem** copies a description you can paste into an email or a message. It works even when the panel is blocked, which is often exactly when you want it.
+
+It carries the tool version, the page, the email and spec sheet in use, what each check concluded, and anything the tool itself noticed going oddly, such as a sheet it could not read or a frame it could not see into. It ends with a blank line for what you expected instead. Fill that in, it is the part nobody else can supply.
+
+Nothing is sent anywhere. It goes to your clipboard and no further, so you decide what to share.
+
+The version at the foot of the panel turns amber and shows an arrow when your bookmark is older than the published one. That is worth checking before reporting anything, because a stale bookmark explains most surprises.
+
 ## Use it on a website
 
 Click the **Web** tab. Metadata at the top, every image and graphic outlined by alt text status.
