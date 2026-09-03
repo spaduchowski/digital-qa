@@ -16,16 +16,16 @@ One bookmark for proofing. **Email** checks the build against the spec sheet. **
 4. Next email, just click the bookmark. The spec stays loaded and the check runs on its own.
 5. Click the x or the bookmark again to close.
 
-You can paste from Excel instead if you prefer. Select the rows, copy, paste into the box. One tab or all of them.
+The sheet is read in your browser. Nothing is uploaded and the file is never changed.
 
 ## What you get
 
 Four lines, one per check. A dot says whether it is fine. Click a line to see the detail. Anything that needs a look opens itself.
 
-- **Preheader**: the hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and **inbox preview**, which is what the inbox will actually display. If nothing separates the preheader from the body copy, the body copy gets pulled in behind it and you will see that in the preview line.
-- **Links**: how many you have clicked, and how many need a look. Open the line for the full checklist.
+- **Preheader**: the hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and how it compares with the spec sheet. When the sheet lists several approved preheaders, the build only has to carry one of them, and the detail says which one it matched. A build that states a whole variant set, the Veeva ones, has to match the sheet's list in full.
+- **Links**: how many you have marked done, and how many need a look. Open the line for the full checklist.
 - **Pixel**: one row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a pixel block.
-- **Job code**: the code and date from the footer, checked against the spec sheet.
+- **Job code**: read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, `in email` and `on spec`.
 
 ## Checking links
 
@@ -35,15 +35,15 @@ The email is not painted over, so your visual proof is unaffected.
 
 - **Open** the destination in a new tab, so you can confirm it lands where it should.
 - **Copy** the URL.
-- **Tick** it once you have checked it.
+- **Mark done** once you have confirmed it. Click again to undo.
 
 Only problems get outlined, so an outline always means look here.
 
 Links that are on the spec sheet but **not in the build** are listed in the panel. There is nothing to click, so this is the one thing clicking through can never find.
 
-**Show remaining** highlights what you have not ticked yet. **Clear ticks** starts the pass again.
+**Show remaining** highlights what you have not done yet. **Clear all** starts the pass again.
 
-Ticks are remembered per job. Two builds with the same links, the state variants for example, share their ticks, and the box tells you which file it was ticked on. Change a link and its tick clears itself, so a tick never covers a URL nobody looked at.
+What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
 ## Use it on a website
 
@@ -57,13 +57,13 @@ Hover any image for its alt text, click to pin, Copy puts it on your clipboard.
 
 ## Good to know
 
-- **Pin to Side or Top** at the foot of the panel. Side keeps the email clear, top suits a wide screen. Your choice is remembered.
+- **Panel: Side or Top** at the foot. Side keeps the email clear, top suits a wide screen. Your choice is remembered.
 - Reads the preview frame first, then the page itself, so it also works on an email file opened straight in the browser.
 - Switched emails in the preview? The check re-runs when you click the bookmark again.
 - Emails built from fragments only show all their links once the preview is set to assembled. The panel says so when it spots fragments.
 - Subject lines live in the sending platform, not in the HTML, so they cannot be checked here.
 - Whether a destination actually loads can only be answered by opening it. No tool can answer it for you. That is what Open is for.
-- **Copy report** puts the whole result on your clipboard, ticks included, ready for a ticket.
+- **Copy report** puts the whole result on your clipboard, progress included, ready for a ticket.
 - **A-** and **A+** resize the text. The **-** button collapses the panel.
 - The panel foot shows your bookmark's version. Older than the install page? Delete the bookmark and re-drag.
 - Works in Chrome, Edge, Firefox, Safari.
