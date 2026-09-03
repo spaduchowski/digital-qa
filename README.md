@@ -135,6 +135,26 @@ Links with no destination to open, a `{{token}}` resolved at send time for insta
 
 `3 of 9 done` is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.
 
+## The report
+
+**Save report** produces a record meant to answer a question months from now, not to be read today. It opens a printable page and the print dialog; choose **Save as PDF**.
+
+Fill in **Proofed by** first. It is remembered, so you only type it once.
+
+It carries:
+
+- **When**, three ways: local time, your timezone, and UTC.
+- **What was proofed**: the email file, the page it was read from, and a fingerprint of the build.
+- **What it was checked against**: the spec sheet file name, and a fingerprint of the sheet as read. A file name is not evidence, because sheets get revised while the name stays the same. The fingerprint pins the exact version used.
+- **Every check in full**, nothing truncated.
+- **Every link**: what it is, where it goes, whether it is on the sheet, and whether you marked it done.
+- **What the report does not cover**, stated plainly.
+- **The spec sheet as read**: every non empty row the tool parsed, across all tabs, so the record is self contained.
+
+Two things it is careful about. It says links were **marked done by the proofer**, never verified, because the tool cannot know you opened them. And an incomplete pass says so in bold rather than quietly, so a partial record can never be mistaken for a finished one.
+
+It will not produce a report when nothing has been compared, which is any of **NO SPEC**, **WRONG SHEET** or **UNCONFIRMED**.
+
 ## Use it on a website
 
 Click the **Web** tab. Metadata at the top, every image and graphic outlined by alt text status.
@@ -154,6 +174,7 @@ Hover any image for its alt text, click to pin, Copy puts it on your clipboard.
 - Subject lines live in the sending platform, not in the HTML, so they cannot be checked here.
 - Whether a destination actually loads can only be answered by opening it. No tool can answer it for you. That is what Open is for.
 - **Copy report** puts the whole result on your clipboard, progress included, ready for a ticket.
+- **Save report** opens a printable record and the print dialog, where you choose Save as PDF. Use it when the result may need to be pointed to later.
 - **A-** and **A+** resize the text. The **-** button collapses the panel.
 - The panel foot shows your bookmark's version. Older than the install page? Delete the bookmark and re-drag.
 - Works in Chrome, Edge, Firefox, Safari.
