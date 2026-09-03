@@ -49,6 +49,20 @@ Open the **Links** line for the checklist. It is always split into **Not done** 
 
 What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
+## Alt text and title tags
+
+These two only appear when the spec sheet carries an alt text list. Nothing to switch on, and they stay invisible for every other client.
+
+**Alt text** compares the alt copy in the build against the sheet, exactly, using the same labels as the link list:
+
+- **spec + email.** On the sheet and in the build.
+- **spec only.** On the sheet, missing from the build. Fails the pass.
+- **email only.** In the build, on no sheet row. Amber. This is alt drift.
+
+**Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
+
+Images with no alt at all are counted quietly, since a decorative image is allowed an empty alt.
+
 ## What a result means
 
 The spec sheet is the authority. A green **PASS** means everything the sheet asks for is present in the build and matches. Nothing more is claimed.
