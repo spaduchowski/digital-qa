@@ -23,7 +23,7 @@ The sheet is read in your browser. Nothing is uploaded and the file is never cha
 Four lines, one per check. A dot says whether it is fine. Click a line to see the detail. Anything that needs a look opens itself.
 
 - **Preheader**: the hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and how it compares with the spec sheet. When the sheet lists several approved preheaders, the build only has to carry one of them, and the detail says which one it matched. A build that states a whole variant set, the Veeva ones, has to match the sheet's list in full.
-- **Links**: how many you have marked done, and how many need a look. Open the line for the full checklist. Image buttons carry their alt text here too.
+- **Links**: how many you have marked done, and how many need a look. Open the line for the checklist, split into Not done and Done. Image buttons carry their alt text here too.
 - **Pixel**: one row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a pixel block.
 - **Job code**: read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, `in email` and `on spec`.
 
@@ -43,7 +43,9 @@ Only problems get outlined, so an outline always means look here.
 
 Links that are on the spec sheet but **not in the build** are listed in the panel. There is nothing to click, so this is the one thing clicking through can never find.
 
-**Show remaining** outlines everything you have not done yet in dashed red, and splits the checklist in the panel into **Still to do** and **Done**, so it reads the same whether your eye is on the email or on the panel. **Clear all** starts the pass again.
+Open the **Links** line for the checklist. It is always split into **Not done** and **Done**, so your progress reads the same whether your eye is on the email or on the panel. Under the Not done group, **Outline these in the email** puts a dashed red outline on exactly those links, for when you want to find them on the page. Press it again to clear the outlines.
+
+**Clear all** at the foot starts the pass again.
 
 What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
