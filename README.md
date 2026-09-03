@@ -53,7 +53,11 @@ What you mark done is remembered per job. Two builds with the same links, the st
 
 Some builds pull extra blocks in at send time. That markup is not in the file you are previewing, so the tool cannot read it, and it will not pretend otherwise.
 
-When it sees a fragment slot it adds a **Fragments** section listing the spec sheet links it could not find in this file. Those are not reported as missing, because the tool cannot know. They are yours to check against the fragments.
+When it sees a fragment slot it adds a **Fragments** section.
+
+**If the preview page lists the fragments**, the tool reads them and checks them properly. A spec sheet link found in a fragment is confirmed and the row says which file it was in. Only a link in neither the build nor its fragments is reported as missing.
+
+**If the fragments are not on the page**, for an email opened on its own for example, the section says so and lists what it could not check. Those are not called missing, because the tool cannot know. They are yours to check.
 
 ## Switching emails
 
