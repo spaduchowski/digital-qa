@@ -43,7 +43,7 @@ Only problems get outlined, so an outline always means look here.
 
 Links that are on the spec sheet but **not in the build** are listed in the panel. There is nothing to click, so this is the one thing clicking through can never find.
 
-Open the **Links** line for the checklist. It is always split into **Not done** and **Done**, so your progress reads the same whether your eye is on the email or on the panel. Under the Not done group, **Outline these in the email** puts a dashed red outline on exactly those links, for when you want to find them on the page. Press it again to clear the outlines.
+Open the **Links** line for the checklist. It is always split into **Not done** and **Done**, so your progress reads the same whether your eye is on the email or on the panel. Under the Not done group, **Outline these in email** puts a dashed red outline on exactly those links, image buttons included, for when you want to find them on the page. Press it again to clear the outlines.
 
 **Clear all** at the foot starts the pass again.
 
