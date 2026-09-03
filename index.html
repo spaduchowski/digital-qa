@@ -27,6 +27,17 @@
   textarea { width: 100%; height: 90px; margin-top: 10px; font-family: Menlo, Consolas, monospace; font-size: 11px; box-sizing: border-box; -webkit-user-select: text; user-select: text; }
   code { background: #e2e8f0; border-radius: 3px; padding: 1px 5px; font-size: 12px; }
   .note { background: #fef9c3; border-radius: 8px; padding: 10px 14px; font-size: 14px; }
+  table.checks { width: 100%; border-collapse: collapse; margin: 10px 0 4px; font-size: 14px; }
+  table.checks th { text-align: left; font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #64748b; font-weight: 600; padding: 0 10px 6px 0; border-bottom: 1px solid #e2e8f0; }
+  table.checks td { padding: 9px 10px 9px 0; border-bottom: 1px solid #eef2f7; vertical-align: top; }
+  table.checks td:first-child { font-weight: 600; white-space: nowrap; }
+  table.checks td .badge { font-weight: 700; }
+  table.checks td:last-child { color: #64748b; font-family: Menlo, Consolas, monospace; font-size: 12px; white-space: nowrap; }
+  .figs { display: flex; flex-wrap: wrap; gap: 10px; margin: 14px 0 4px; }
+  .fig { flex: 1 1 130px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 12px 14px; }
+  .fig b { display: block; font-size: 22px; font-family: Menlo, Consolas, monospace; font-weight: 500; color: #0f172a; }
+  .fig span { font-size: 12.5px; color: #64748b; line-height: 1.4; display: block; margin-top: 2px; }
+  @media (max-width: 560px) { table.checks td:last-child { white-space: normal; } }
 </style>
 </head>
 <body>
@@ -56,6 +67,22 @@
       <li>Click the <strong>&times;</strong> or the bookmark again to close.</li>
     </ol>
     <p class="hint">The sheet is read in your browser. Nothing is uploaded and the file is never changed.</p>
+  </div>
+
+  <div class="card">
+    <h2>The checks at a glance</h2>
+    <p>A check only appears when the spec sheet asks for it. That is what keeps one client's requirements off another client's job.</p>
+    <table class="checks">
+      <tr><th>Check</th><th>What it answers</th><th>Shows when</th></tr>
+      <tr><td>Preheader</td><td>Is the hidden inbox line the one the sheet approved?</td><td>always</td></tr>
+      <tr><td>Links</td><td>Is every link on the sheet in the build, and have you clicked it?</td><td>always</td></tr>
+      <tr><td>Job code</td><td>Does the footer code match the Veeva code on the sheet?</td><td>always</td></tr>
+      <tr><td>Fragments</td><td>Which fragment holds each remaining sheet link?</td><td>the build has a fragment slot</td></tr>
+      <tr><td>Tracking</td><td>Is every part of the tracking block present and in the right place?</td><td>the sheet carries a tracking block</td></tr>
+      <tr><td>Alt text</td><td>Does the alt copy match the sheet exactly, with no drift?</td><td>the sheet carries an alt list</td></tr>
+      <tr><td>Title tags</td><td>Are there any title attributes, which this client allows none of?</td><td>the sheet carries an alt list</td></tr>
+    </table>
+    <p class="hint">Subject lines appear on nearly every sheet and cannot be checked, because they live in the sending platform rather than in the HTML.</p>
   </div>
 
   <div class="card">
@@ -134,27 +161,34 @@
   <div class="card">
     <h2>What a result means</h2>
     <p>The spec sheet is the authority. A green <strong>PASS</strong> means everything the sheet asks for is present in the build and matches. Nothing more is claimed.</p>
-    <ul class="legend">
-      <li><span class="badge green">PASS</span> Every item on the sheet is there and correct, and you have clicked through the links. Green never appears for something the sheet is silent about, or for a pass you have not finished.</li>
-      <li><span class="badge amber">CHECK</span> It is all there, but something wants a look.</li>
-      <li><span class="badge red">FAIL</span> Something the sheet asks for is missing from the build.</li>
-      <li><span class="badge grey">NO SPEC</span> No sheet loaded yet, so nothing has been compared. Deliberately not green.</li>
-    </ul>
+    <table class="checks">
+      <tr><th>Verdict</th><th>What it means</th><th>Compared?</th></tr>
+      <tr><td><span class="badge green">PASS</span></td><td>Every item on the sheet is there and correct, and you have clicked through the links. Green never appears for something the sheet is silent about, or for a pass you have not finished.</td><td>yes</td></tr>
+      <tr><td><span class="badge amber">CHECK</span></td><td>It is all there, but something wants a look, or the pass is not finished yet.</td><td>yes</td></tr>
+      <tr><td><span class="badge red">FAIL</span></td><td>Something the sheet asks for is missing from the build.</td><td>yes</td></tr>
+      <tr><td><span class="badge red">WRONG SHEET</span></td><td>The footer code and the sheet's Veeva code disagree.</td><td>nothing</td></tr>
+      <tr><td><span class="badge amber">UNCONFIRMED</span></td><td>The email carries no job code, so the tool cannot tell whether this sheet applies. About one email in twelve.</td><td>nothing</td></tr>
+      <tr><td><span class="badge grey">NO SPEC</span></td><td>No sheet loaded yet. Deliberately not green.</td><td>nothing</td></tr>
+    </table>
+    <p class="hint">Neither blocking state can be overridden. Load the spec sheet for the email you are looking at.</p>
 
     <h3>Where the link list comes from</h3>
     <p>The checklist is <strong>every link found in the email</strong>, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot.</p>
     <p>Every row says which side it came from, so you can see at a glance what is covered:</p>
-    <ul>
-      <li><strong>spec + email.</strong> On the sheet and in the build. This is what you want.</li>
-      <li><strong>email only.</strong> In the build, on no sheet row. Flagged amber. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.</li>
-      <li><strong>spec only.</strong> On the sheet with nothing in the build. These get their own group, <strong>Not in the build</strong>, because there is nothing to click and nothing to mark done. This is the one thing clicking through can never find.</li>
-    </ul>
+    <table class="checks">
+      <tr><th>Row says</th><th>Meaning</th><th>Reads as</th></tr>
+      <tr><td>spec + email</td><td>On the sheet and in the build. This is what you want.</td><td>fine</td></tr>
+      <tr><td>email only</td><td>In the build, on no sheet row. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.</td><td>amber</td></tr>
+      <tr><td>spec only</td><td>On the sheet with nothing in the build. Grouped under <strong>Not in the build</strong>, because there is nothing to click and nothing to mark done. This is the one thing clicking through can never find.</td><td>fails</td></tr>
+    </table>
 
     <h3>What is not checked</h3>
     <ul>
       <li><strong>Phone, email and in-page links.</strong> Skipped, because no spec sheet covers them.</li>
       <li><strong>Subject lines.</strong> They live in the sending platform, not in the HTML.</li>
       <li><strong>Whether a destination loads.</strong> No bookmarklet can answer that. A live page and a dead one look identical to it. That is what <strong>Open</strong> is for, and why the done marks exist.</li>
+      <li><strong>Which fragments actually ship.</strong> The rep chooses at send time. A link found in a fragment is available, not confirmed present.</li>
+      <li><strong>Anything the sheet does not mention.</strong> Body copy, layout, ISI wording. A pass covers the sheet and nothing beyond it.</li>
     </ul>
 
     <h3>Amber until you have finished</h3>
@@ -174,6 +208,26 @@
       <li><span class="badge grey">GREY DASHED</span> decorative by design.</li>
     </ul>
     <p>Hover any image for its alt text, click to pin, <strong>Copy</strong> puts it on your clipboard.</p>
+  </div>
+
+  <div class="card">
+    <h2>Built against real jobs</h2>
+    <p>Every rule was measured against the work in hand before it was written, rather than assumed.</p>
+    <div class="figs">
+      <div class="fig"><b>43</b><span>jobs with both a build and a sheet</span></div>
+      <div class="fig"><b>166</b><span>email build files behind them</span></div>
+      <div class="fig"><b>52</b><span>email spec sheets analysed</span></div>
+    </div>
+    <p>A sample of what the measurements decided:</p>
+    <table class="checks">
+      <tr><th>Measured</th><th>What it decided</th><th></th></tr>
+      <tr><td>9 of 52</td><td>sheets carry UTM columns, so a build adding its own tags can never count as a mismatch</td><td></td></tr>
+      <tr><td>4 of 491</td><td>image links have no alt text, rare enough that flagging it is signal rather than noise</td><td></td></tr>
+      <tr><td>16 of 178</td><td>builds carry no job code at all, which is why the unconfirmed state exists</td><td></td></tr>
+      <tr><td>23 cells</td><td>across 8 sheets write a URL with no https, invisible to the tool until it was fixed</td><td></td></tr>
+      <tr><td>30 files</td><td>on one job share a single link set, which is why what you mark done is remembered per job rather than per file</td><td></td></tr>
+    </table>
+    <p>Four genuine defects surfaced during testing, in builds that had already been through proofing: a missing preheader where the sheet listed two, a build with no job code anywhere, and two cases of alt text drifting from the approved copy. None had been caught by eye.</p>
   </div>
 
   <div class="card">
