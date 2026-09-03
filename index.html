@@ -32,7 +32,7 @@
 <body>
 <div class="wrap">
   <h1>Digital QA <span style="font-size:15px;color:#64748b;font-weight:normal;">v1.0</span></h1>
-  <p class="sub">One bookmark for proofing. EMAIL checks the build against the spec sheet. WEB checks page metadata and image alt text. Runs only in your browser. Nothing is installed and no tracking request is sent.</p>
+  <p class="sub">One bookmark for proofing. <strong>Email</strong> checks the build against the spec sheet. <strong>Web</strong> checks page metadata and image alt text. Runs only in your browser. Nothing is installed and no tracking request is sent.</p>
 
   <div class="card">
     <h2>Install</h2>
@@ -50,59 +50,66 @@
     <h2>Use it on an email</h2>
     <ol>
       <li>Open the email preview page.</li>
-      <li>Click <strong>Digital QA</strong> in the bookmarks bar. It opens on the EMAIL tab.</li>
-      <li>In Excel, select the spec sheet rows you care about and copy. Paste into the box, click <strong>CHECK</strong>.</li>
-      <li>Next email, just click the bookmark. The spec stays saved and the check runs on its own.</li>
-      <li>Click <strong>OFF</strong> or the bookmark again to close.</li>
+      <li>Click <strong>Digital QA</strong> in the bookmarks bar.</li>
+      <li>Choose the spec sheet, or drop the <code>.xlsx</code> onto the panel. It reads every tab.</li>
+      <li>Next email, just click the bookmark. The spec stays loaded and the check runs on its own.</li>
+      <li>Click the <strong>&times;</strong> or the bookmark again to close.</li>
     </ol>
-    <p class="hint">Paste one tab or all of them. It picks out what it recognises: the Preheader row, every URL with its description, the pixel block, the Veeva code. Paste less and it checks less, nothing breaks.</p>
+    <p class="hint">Nothing is uploaded. The sheet is read in your browser. You can paste from Excel instead if you prefer, one tab or all of them.</p>
   </div>
 
   <div class="card">
-    <h2>What it checks</h2>
+    <h2>What you get</h2>
+    <p>Four lines, one per check. A dot says whether it is fine. Click a line to see the detail. Anything that needs a look opens itself.</p>
 
     <h3>Preheader</h3>
-    <p>The hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. You get the text, the variant list when there is one, and <strong>inbox preview</strong>, which is what the inbox will actually display. If there is no spacer after the preheader, body copy gets pulled in behind it and you will see that in the preview line.</p>
+    <p>The hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and <strong>inbox preview</strong>, which is what the inbox will actually display. If nothing separates the preheader from the body copy, the body copy gets pulled in behind it and you will see that in the preview line.</p>
 
     <h3>Links</h3>
-    <p>The email is not painted over, so your visual check is unaffected. <strong>Click any link</strong> and a box shows where it goes, what the spec sheet says it should be, and buttons to <strong>COPY</strong> the URL, <strong>OPEN</strong> it in a new tab, and mark it <strong>CHECKED</strong>.</p>
+    <p>The email is not painted over, so your visual proof is unaffected. <strong>Click any link in the email.</strong> It does not navigate. A box shows where it goes, what the spec sheet says it should be, and three buttons:</p>
+    <ul>
+      <li><strong>Open</strong> the destination in a new tab, to confirm it lands where it should.</li>
+      <li><strong>Copy</strong> the URL.</li>
+      <li><strong>Tick</strong> it once you have checked it.</li>
+    </ul>
     <ul>
       <li>Only problems get outlined, so an outline always means look here.</li>
-      <li>Links on the spec sheet that are <em>not in the build</em> are listed in the panel. Nothing to click, so this is the one thing a click through can never find.</li>
-      <li>The counter shows how far through you are. <strong>SHOW REMAINING</strong> highlights what is left.</li>
-      <li>Ticks are remembered per job. Two builds with the same links, the state variants for example, share their ticks, and the box tells you which file it was checked on.</li>
+      <li>Links on the spec sheet that are <em>not in the build</em> are listed in the panel. Nothing to click, so this is the one thing clicking through can never find.</li>
+      <li>Open the Links line for the full checklist. <strong>Show remaining</strong> highlights what is left.</li>
+      <li>Ticks are remembered per job. Two builds with the same links, the state variants for example, share their ticks, and the box tells you which file it was ticked on.</li>
       <li>Change a link and its tick clears itself, so a tick never covers a URL nobody looked at.</li>
     </ul>
 
     <h3>Pixel</h3>
-    <p>Same check as the old Pixel Tracking QA bookmark. One row per part of the block, so a partial build is obvious. Runs when the pasted spec includes the tracking code, stays quiet when it does not.</p>
+    <p>One row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a pixel block.</p>
 
     <h3>Job code</h3>
-    <p>The PRC code and date from the footer, checked against the Veeva code on the spec sheet.</p>
+    <p>The code and date from the footer, checked against the spec sheet.</p>
   </div>
 
   <div class="card">
     <h2>Use it on a website</h2>
-    <p>Click the <strong>WEB</strong> tab. Metadata at the top, every image and graphic outlined by alt text status.</p>
+    <p>Click the <strong>Web</strong> tab. Metadata at the top, every image and graphic outlined by alt text status.</p>
     <ul class="legend">
       <li><span class="badge green">GREEN</span> has alt text or an aria-label.</li>
       <li><span class="badge red">RED</span> missing. Needs fixing.</li>
       <li><span class="badge amber">GREY DASHED</span> decorative by design.</li>
     </ul>
-    <p>Hover any image for its alt text, click to pin, COPY puts it on your clipboard.</p>
+    <p>Hover any image for its alt text, click to pin, <strong>Copy</strong> puts it on your clipboard.</p>
   </div>
 
   <div class="card">
     <h2>Good to know</h2>
     <ul>
       <li>Reads the preview frame first, then the page itself, so it also works on an email file opened straight in the browser.</li>
-      <li>Switched emails in the preview? Click <strong>CHECK</strong> again to re-read.</li>
+      <li>Switched emails in the preview? Click the bookmark again to re-read.</li>
       <li>Emails built from fragments only show all their links once the preview is set to assembled. The panel says so when it spots fragments.</li>
       <li>Subject lines live in the sending platform, not in the HTML, so they cannot be checked here.</li>
-      <li>Whether a destination actually loads can only be answered by opening it. That is what OPEN is for.</li>
-      <li><strong>COPY REPORT</strong> puts the whole result on your clipboard, ticks included, ready for a ticket.</li>
-      <li>Text too small? <strong>A-</strong> and <strong>A+</strong>. <strong>MIN</strong> collapses the panel.</li>
-      <li>The panel header shows your bookmark's version. Older than v1.0? Delete the bookmark, re-drag from this page.</li>
+      <li>Whether a destination actually loads can only be answered by opening it. No tool can answer it for you. That is what <strong>Open</strong> is for.</li>
+      <li><strong>Copy report</strong> puts the whole result on your clipboard, ticks included, ready for a ticket.</li>
+      <li><strong>Pin to Side or Top</strong> at the foot of the panel. Side keeps the email clear, top suits a wide screen. Your choice is remembered.</li>
+      <li>Text too small? <strong>A-</strong> and <strong>A+</strong> at the foot of the panel. The <strong>&minus;</strong> button collapses it.</li>
+      <li>The panel foot shows your bookmark's version. Older than v1.0? Delete the bookmark, re-drag from this page.</li>
       <li>Works in Chrome, Edge, Firefox, Safari.</li>
     </ul>
     <div class="note">Cross-domain preview frames cannot be read by any bookmarklet. The panel says so when it hits one.</div>
