@@ -1,0 +1,5 @@
+# whitelist: ignore everything, publish only the install page and readme
+*
+!.gitignore
+!index.html
+!README.md
