@@ -64,7 +64,9 @@ That is only safe while the tool can prove the sheet and the email are the same 
 - **WRONG SHEET**, red. The codes disagree. This sheet is for another job.
 - **UNCONFIRMED**, amber. The email carries no job code, so the tool cannot tell whether the sheet applies. About one email in twelve.
 
-In both cases nothing is compared and no check is shown, because a confident answer against the wrong sheet is worse than no answer. Load the sheet for that job, or press **Compare anyway** if you know better. Agreeing once does not carry over to a different job.
+In both cases nothing is compared, no check is shown, and any outlines on the email are cleared. There is no way to override it. Load the spec sheet for the email you are looking at.
+
+For an email with no job code, loading the sheet while that email is on screen is what ties the two together. Switch away and back and it will ask again, because it has no other way to know.
 
 ## Alt text and title tags
 
@@ -84,7 +86,7 @@ Images with no alt at all are counted quietly, since a decorative image is allow
 
 The spec sheet is the authority. A green **PASS** means everything the sheet asks for is present in the build and matches. Nothing more is claimed.
 
-- **PASS**, green. Every item on the sheet is there and correct.
+- **PASS**, green. Every item on the sheet is there and correct. Green never appears for something the sheet is silent about. If the sheet has no preheader row, the preheader line says so rather than reading as verified.
 - **CHECK**, amber. It is all there, but something wants a look.
 - **FAIL**, red. Something the sheet asks for is missing from the build.
 - **NO SPEC**, grey. No sheet loaded yet, so nothing has been compared. Deliberately not green.
