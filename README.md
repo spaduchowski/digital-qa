@@ -49,6 +49,18 @@ Open the **Links** line for the checklist. It is always split into **Not done** 
 
 What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
+## Fragments
+
+Some builds pull extra blocks in at send time. That markup is not in the file you are previewing, so the tool cannot read it, and it will not pretend otherwise.
+
+When it sees a fragment slot it adds a **Fragments** section listing the spec sheet links it could not find in this file. Those are not reported as missing, because the tool cannot know. They are yours to check against the fragments.
+
+## Switching emails
+
+The spec sheet stays loaded between emails on purpose. One sheet covers a whole job, and some jobs are thirty state variants.
+
+That is only safe while the sheet and the email are the same job. When the job code in the footer does not match the Veeva code on the sheet, the panel says **WRONG SHEET**, names both codes, and compares nothing. Load the sheet for that job, or press **Compare anyway** if you know better.
+
 ## Alt text and title tags
 
 These two only appear when the spec sheet carries an alt text list. Nothing to switch on, and they stay invisible for every other client.
