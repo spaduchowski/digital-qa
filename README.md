@@ -57,6 +57,12 @@ When it sees a fragment slot it adds a **Fragments** section.
 
 **If the preview page lists the fragments**, the tool reads them and checks them properly. A spec sheet link found in a fragment is confirmed and the row says which file it was in. Only a link in neither the build nor its fragments is reported as missing.
 
+Fragment links are only ever used to **satisfy** something your sheet already asks for. The tool never adds anything from a fragment, so a sheet that says nothing about fragments is unaffected.
+
+Alt text inside a fragment is deliberately left alone, because a fragment is its own job with its own spec sheet, and counting it here would report it as drift against a sheet that never covered it.
+
+Toggle the preview to a fragment and the panel says **Viewing a fragment, not the email**, then asks for that fragment's own sheet.
+
 **If the fragments are not on the page**, for an email opened on its own for example, the section says so and lists what it could not check. Those are not called missing, because the tool cannot know. They are yours to check.
 
 ## Switching emails
