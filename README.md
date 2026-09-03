@@ -62,10 +62,11 @@ The spec sheet is the authority. A green **PASS** means everything the sheet ask
 
 The checklist is **every link found in the email**, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot.
 
-That is why both directions are covered:
+Every row says which side it came from, so you can see at a glance what is covered:
 
-- **On the sheet, not in the build.** Listed on its own. There is nothing to click, so this is the one thing clicking through can never find.
-- **In the build, not on the sheet.** Flagged amber. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.
+- **spec + email.** On the sheet and in the build. This is what you want.
+- **email only.** In the build, on no sheet row. Flagged amber. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.
+- **spec only.** On the sheet with nothing in the build. These get their own group, **Not in the build**, because there is nothing to click and nothing to mark done. This is the one thing clicking through can never find.
 
 ### What is not checked
 
