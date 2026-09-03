@@ -61,7 +61,13 @@ Fragment links are only ever used to **satisfy** something your sheet already as
 
 Alt text inside a fragment is deliberately left alone, because a fragment is its own job with its own spec sheet, and counting it here would report it as drift against a sheet that never covered it.
 
-Toggle the preview to a fragment and the panel says **Viewing a fragment, not the email**, then asks for that fragment's own sheet.
+### Checking them
+
+The fragment list is a checklist, not just a note. **Toggle the preview to a fragment** and the panel switches to that fragment: its links are checked against the loaded sheet, and you click, **Open** and **Mark done** exactly as you do in the email.
+
+Only Links is shown, because preheader, tracking and job code belong to the email rather than to a fragment. The rest of the sheet is not judged there either, since a fragment is one piece of the job.
+
+Go back to the email and the Fragments line counts what you have done, `3 of 3 fragment links done`, with a tick beside each one and the file you checked it in.
 
 **If the fragments are not on the page**, for an email opened on its own for example, the section says so and lists what it could not check. Those are not called missing, because the tool cannot know. They are yours to check.
 
