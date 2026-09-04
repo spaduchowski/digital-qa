@@ -105,7 +105,9 @@ These two only appear when the spec sheet carries an alt text list. Nothing to s
 
 A call to action built as a live text button carries no image, so it carries no alt. The sheet still lists its copy, because the alt tab gets filled in while the design is only being anticipated. The words are in the build, as the button's own text, and a reader with images off sees them, which is the thing an alt exists to guarantee. So the row is satisfied and says which ones were. This works one way only: button text can answer a row the sheet already asks for, never add one.
 
-Click any alt text row and the tool scrolls that image into view, flashes it and opens a box with the copy, where it was found, and Copy. Next steps to the one after it, the same as the link box. Images the alt list covers are outlined, green when they match the sheet and amber for copy the sheet does not carry. There is no Mark done here, because alt copy is compared rather than clicked through.
+Click any alt text row and the tool scrolls that image into view, flashes it and opens a box with the copy and where it was found. Copy, Mark done and Next work as they do on a link. Open is absent, since alt text has no destination.
+
+Mark it done once you have checked the copy against the image. The tool compares the words exactly. What it cannot tell you is whether the right alt is on the right image, and that is what you are confirming. Outlines follow the link rule: red dashed until marked, green once marked, amber for copy the sheet does not carry.
 
 **Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
 
