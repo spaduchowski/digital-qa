@@ -99,17 +99,19 @@
     <p><strong>Show the full URL</strong> swaps the broken out view for the whole address on one line, and when the sheet wrote it differently, for example without <code>https://</code>, it shows the sheet's own wording underneath. Your choice is remembered.</p>
     <p>For a button made of an image, the box also shows its <strong>alt text</strong>, the only thing a reader with images turned off ever sees. An image button with no alt is flagged.</p>
     <ul>
-      <li>Only problems get outlined, so an outline always means look here.</li>
+      <li>Outlines mark links on the email itself. Green for done, amber for anything that differs from the sheet or is not on it, dashed red for the remaining set when you ask for it.</li>
       <li><strong>Click any row in the Links list</strong> and the tool scrolls that link into view, flashes it, and opens its box. You never have to hunt for a link in a long email.</li>
       <li>Links on the spec sheet that are <em>not in the build</em> are listed in the panel. Nothing to click, so this is the one thing clicking through can never find.</li>
       <li>Open the <strong>Links</strong> line for the checklist. It is always split into <em>Not done</em> and <em>Done</em>, so your progress reads the same whether you are looking at the email or the panel.</li>
-      <li>Under the Not done group, <strong>Outline these in email</strong> puts a dashed red outline on exactly those links, image buttons included, for when you want to find them on the page. Press it again to clear them. <strong>Clear all</strong> at the foot starts the pass over.</li>
+      <li>Under the Not done group, <strong>Outline these in email</strong> puts a dashed red outline on exactly those links, image buttons included, for when you want to find them on the page. Press it again to stop.</li>
+      <li><strong>Hide outlines</strong> at the foot takes every outline off the email, for when you are reading the artwork rather than the links. <strong>Show outlines</strong> puts them back. Your choice is remembered.</li>
+      <li><strong>Restart proof</strong> at the foot clears every mark on this job, fragment links included, and hands the email back with nothing drawn on it. It asks for a second click first, because a long job is a lot of ticks to lose.</li>
       <li>What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on.</li>
       <li>Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.</li>
     </ul>
 
     <h3>Tracking</h3>
-    <p>One row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a tracking block.</p>
+    <p>One row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a tracking block. Each row is named for what that part counts: <strong>open tracking</strong> fires when the email is opened, <strong>print tracking</strong> when it is printed, <strong>forward tracking</strong> when a forwarded copy is opened. The last two rows are the tracking image itself and the element the print and forward rules attach to.</p>
 
     <h3>Job code</h3>
     <p>Read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, <code>in email</code> and <code>on spec</code>.</p>
@@ -200,11 +202,11 @@
 
   <div class="card">
     <h2>The report</h2>
-    <p><strong>Save report</strong> produces a record meant to answer a question months from now, not to be read today. It opens a printable page and the print dialog; choose <strong>Save as PDF</strong>. Fill in <strong>Proofed by</strong> first, it is remembered so you only type it once.</p>
+    <p><strong>Save report</strong> produces a record meant to answer a question months from now, not to be read today. It opens a printable page and the print dialog; choose <strong>Save as PDF</strong>. <strong>Proofed by</strong> is required, the report will not save without it. It is remembered, so you only type it once.</p>
     <table class="checks">
       <tr><th>On the report</th><th>Why it is there</th><th></th></tr>
       <tr><td>Date and time</td><td>Local time, your timezone, and UTC, so there is no ambiguity later</td><td></td></tr>
-      <tr><td>Proofed by</td><td>Without a name the record is anonymous and much weaker</td><td></td></tr>
+      <tr><td>Proofed by</td><td>Required. An unsigned record answers nobody's question later</td><td></td></tr>
       <tr><td>Email and source page</td><td>Which build was proofed, and where it was read from</td><td></td></tr>
       <tr><td>Sheet fingerprint</td><td>A file name is not evidence. Sheets get revised while the name stays the same, so the fingerprint pins the version actually used</td><td></td></tr>
       <tr><td>Every check in full</td><td>Nothing truncated, unlike the panel</td><td></td></tr>
