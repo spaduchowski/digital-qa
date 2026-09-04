@@ -194,6 +194,7 @@ Hover any image for its alt text, click to pin, Copy puts it on your clipboard.
 - **Save report** opens a printable record and the print dialog, where you choose Save as PDF. Use it when the result may need to be pointed to later.
 - **A-** and **A+** resize the text. The **-** button collapses the panel.
 - The panel foot shows your bookmark's version. Older than the install page? Delete the bookmark and re-drag.
+- Every row and control in the panel is reachable by keyboard. Tab moves between them, Enter or Space opens the one you are on, and the focused item carries a blue ring.
 - Works in Chrome, Edge, Firefox, Safari.
 
 Cross-domain preview frames cannot be read by any bookmarklet. The panel says so when it hits one.
