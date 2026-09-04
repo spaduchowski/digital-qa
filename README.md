@@ -25,7 +25,7 @@ Four lines, one per check. A dot says whether it is fine. Click a line to see th
 - **Preheader**: the hidden line the inbox shows next to the subject. It can never be proofed by eye, which is what this is for. The detail shows the text, the variant list when there is one, and how it compares with the spec sheet. When the sheet lists several approved preheaders, the build only has to carry one of them, and the detail says which one it matched. A build that states a whole variant set, the Veeva ones, has to match the sheet's list in full.
 - **Links**: how many you have marked done, and how many need a look. Open the line for the checklist, split into Not done and Done. Image buttons carry their alt text here too.
 - **Tracking**: one row per part of the tracking block, so a partial build is obvious. Only appears when the spec sheet carries a tracking block.
-- **Job code**: read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, `in email` and `on spec`.
+- **Job code**: read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, `in email` and `on spec`. The code is reported on its own, since no spec sheet asks for a date beside it.
 
 ## Checking links
 
@@ -97,8 +97,11 @@ These two only appear when the spec sheet carries an alt text list. Nothing to s
 **Alt text** compares the alt copy in the build against the sheet, exactly, using the same labels as the link list:
 
 - **spec + email.** On the sheet and in the build.
+- **spec + email, as link text.** On the sheet, and in the build as a live text button rather than an image.
 - **spec only.** On the sheet, missing from the build. Fails the pass.
 - **email only.** In the build, on no sheet row. Amber. This is alt drift.
+
+A call to action built as a live text button carries no image, so it carries no alt. The sheet still lists its copy, because the alt tab gets filled in while the design is only being anticipated. The words are in the build, as the button's own text, and a reader with images off sees them, which is the thing an alt exists to guarantee. So the row is satisfied and says which ones were. This works one way only: button text can answer a row the sheet already asks for, never add one.
 
 **Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
 
