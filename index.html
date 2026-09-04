@@ -11,6 +11,13 @@
   h1 { font-size: 26px; margin-bottom: 4px; }
   .sub { color: #475569; margin-top: 0; }
   .card { background: #fff; border-radius: 10px; padding: 22px 26px; margin: 22px 0; box-shadow: 0 1px 4px rgba(15,23,42,.08); }
+  details.card > summary { cursor: pointer; font-size: 17px; font-weight: 700; list-style: none; display: flex; align-items: center; gap: 9px; }
+  details.card > summary::-webkit-details-marker { display: none; }
+  details.card > summary::before { content: ""; flex: 0 0 auto; width: 0; height: 0; border-left: 7px solid #64748b; border-top: 5px solid transparent; border-bottom: 5px solid transparent; transition: transform .12s; }
+  details.card[open] > summary::before { transform: rotate(90deg); }
+  details.card > summary:hover::before { border-left-color: #2563eb; }
+  details.card[open] > summary { margin-bottom: 14px; }
+  details.card > summary:focus-visible { outline: 2px solid #2563eb; outline-offset: 3px; border-radius: 4px; }
   h2 { font-size: 17px; margin-top: 0; }
   h3 { font-size: 14px; margin: 18px 0 4px; color: #334155; }
   ol li, ul li { margin-bottom: 6px; }
@@ -66,8 +73,8 @@
     <p class="hint">The sheet is read in your browser. Nothing is uploaded and the file is never changed.</p>
   </div>
 
-  <div class="card">
-    <h2>The checks at a glance</h2>
+  <details class="card">
+    <summary>The checks at a glance</summary>
     <p>A check only appears when the spec sheet asks for it. That is what keeps one client's requirements off another client's job.</p>
     <table class="checks">
       <tr><th>Check</th><th>What it answers</th><th>Shows when</th></tr>
@@ -80,10 +87,10 @@
       <tr><td>Title tags</td><td>Are there any title attributes, which this client allows none of?</td><td>the sheet carries an alt list</td></tr>
     </table>
     <p class="hint">Subject lines appear on nearly every sheet and cannot be checked, because they live in the sending platform rather than in the HTML.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>What you get</h2>
+  <details class="card">
+    <summary>What you get</summary>
     <p>Four lines, one per check. A dot says whether it is fine. Click a line to see the detail. Anything that needs a look opens itself.</p>
 
     <h3>Preheader</h3>
@@ -115,12 +122,12 @@
 
     <h3>Job code</h3>
     <p>Read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, <code>in email</code> and <code>on spec</code>.</p>
-  </div>
+  </details>
 
 
 
-  <div class="card">
-    <h2>Fragments</h2>
+  <details class="card">
+    <summary>Fragments</summary>
     <p>Some builds pull extra blocks in at send time. That markup is not in the file you are previewing, so the tool cannot read it, and it will not pretend otherwise.</p>
     <p>When it sees a fragment slot it adds a <strong>Fragments</strong> section.</p>
     <p><strong>If the preview page lists the fragments</strong>, the tool reads them and checks them properly. A spec sheet link found in a fragment is confirmed and the row says which file it was in. Only a link in neither the build nor its fragments is reported as missing.</p>
@@ -132,10 +139,10 @@
     <p>You do not have to toggle at all if you would rather not. <strong>Click any row in the Fragments list</strong> and you get the same box: the URL, which fragment holds it, <strong>Open</strong>, <strong>Copy</strong>, <strong>Mark done</strong>, and <strong>Show fragment</strong> to put that fragment on screen.</p>
     <p>Either way the Fragments line counts what you have done, <code>3 of 3 fragment links done</code>, with a tick beside each one and the file you checked it in.</p>
     <p><strong>If the fragments are not on the page</strong>, for an email opened on its own for example, the section says so and lists what it could not check. Those are <em>not</em> called missing, because the tool cannot know. They are yours to check.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>Switching emails</h2>
+  <details class="card">
+    <summary>Switching emails</summary>
     <p>The spec sheet stays loaded between emails on purpose. One sheet covers a whole job, and some jobs are thirty state variants.</p>
     <p>That is only safe while the tool can prove the sheet and the email are the same job, so it checks the job code in the footer against the Veeva code on the sheet and refuses to compare unless they agree.</p>
     <ul class="legend">
@@ -144,10 +151,10 @@
     </ul>
     <p>In both cases nothing is compared, no check is shown, and any outlines on the email are cleared. There is no way to override it. Load the spec sheet for the email you are looking at.</p>
     <p class="hint">For an email with no job code, loading the sheet while that email is on screen is what ties the two together. Switch away and back and it will ask again, because it has no other way to know.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>Alt text and title tags</h2>
+  <details class="card">
+    <summary>Alt text and title tags</summary>
     <p>These two only appear when the spec sheet carries an alt text list. Nothing to switch on, and they stay invisible for every other client.</p>
     <p><strong>Alt text</strong> compares the alt copy in the build against the sheet, exactly, using the same labels as the link list:</p>
     <ul>
@@ -157,7 +164,7 @@
     </ul>
     <p><strong>Title tags</strong> reports any <code>title</code> attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads <em>none, as required</em> when the build is clean.</p>
     <p class="hint">Images with no alt at all are counted quietly, since a decorative image is allowed an empty alt.</p>
-  </div>
+  </details>
 
   <div class="card">
     <h2>What a result means</h2>
@@ -200,8 +207,8 @@
     <p><code>3 of 9 done</code> is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.</p>
   </div>
 
-  <div class="card">
-    <h2>The report</h2>
+  <details class="card">
+    <summary>The report</summary>
     <p><strong>Save report</strong> produces a record meant to answer a question months from now, not to be read today. It opens a printable page and the print dialog; choose <strong>Save as PDF</strong>. <strong>Proofed by</strong> is required, the report will not save without it. It is remembered, so you only type it once.</p>
     <table class="checks">
       <tr><th>On the report</th><th>Why it is there</th><th></th></tr>
@@ -227,11 +234,10 @@
       <li>Compare the two sheet fingerprints.</li>
     </ol>
     <p>The same code means the same sheet and the proof stands. A different code means the sheet changed after the proof was done, which is a different conversation, and a far better position than having nothing to point at.</p>
-    <p class="hint">Do not send a code to a client and expect it to mean anything. They have no way to work one out. It is evidence you can act on, not something the reader reads.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>When something looks wrong</h2>
+  <details class="card">
+    <summary>When something looks wrong</summary>
     <p>At the foot of the panel, <strong>Report a problem</strong> copies a description you can paste into an email or a message. It works even when the panel is blocked, which is often exactly when you want it.</p>
     <table class="checks">
       <tr><th>In the report</th><th>Why</th><th></th></tr>
@@ -244,10 +250,10 @@
     </table>
     <p><strong>Nothing is sent anywhere.</strong> It goes to your clipboard and no further, so you decide what to share.</p>
     <p class="hint">The version at the foot of the panel turns amber with an arrow when your bookmark is older than this page. Worth checking before reporting anything.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>Use it on a website</h2>
+  <details class="card">
+    <summary>Use it on a website</summary>
     <p>Click the <strong>Web</strong> tab. Metadata at the top, every image and graphic outlined by alt text status.</p>
     <ul class="legend">
       <li><span class="badge green">GREEN</span> has alt text or an aria-label.</li>
@@ -255,10 +261,10 @@
       <li><span class="badge grey">GREY DASHED</span> decorative by design.</li>
     </ul>
     <p>Hover any image for its alt text, click to pin, <strong>Copy</strong> puts it on your clipboard.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>What changed, and why</h2>
+  <details class="card">
+    <summary>What changed, and why</summary>
     <p>Newest first. Nearly every version here came from someone using the tool and reporting what looked wrong. Several reports had a second problem underneath the one that was noticed.</p>
     <table class="checks">
       <tr><th>Version</th><th>What changed</th><th>Came from</th></tr>
@@ -301,10 +307,10 @@
       <tr><td>v1.0</td><td>First release. Preheader, links, tracking and job code.</td><td>build</td></tr>
     </table>
     <p class="hint">Bookmarks never update themselves. When the version at the foot of the panel is older than v4.6, delete the bookmark and drag it again from this page.</p>
-  </div>
+  </details>
 
-  <div class="card">
-    <h2>Good to know</h2>
+  <details class="card">
+    <summary>Good to know</summary>
     <ul>
       <li>Reads the preview frame first, then the page itself, so it also works on an email file opened straight in the browser.</li>
       <li>Switched emails in the preview? Click the bookmark again to re-read.</li>
@@ -319,7 +325,7 @@
       <li>Works in Chrome, Edge, Firefox, Safari.</li>
     </ul>
     <div class="note">Cross-domain preview frames cannot be read by any bookmarklet. The panel says so when it hits one.</div>
-  </div>
+  </details>
 
   <div class="card">
     <details>
