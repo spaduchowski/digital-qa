@@ -37,6 +37,8 @@ The email is not painted over, so your visual proof is unaffected.
 - **Copy** the URL.
 - **Mark done** once you have confirmed it. Click again to undo.
 
+**Show the full URL** swaps the broken out view for the whole address on one line, and when the sheet wrote it differently, for example without `https://`, it shows the sheet's own wording underneath. Your choice is remembered.
+
 For a button made of an image, the box also shows its **alt text**, the only thing a reader with images turned off ever sees. An image button with no alt is flagged.
 
 Only problems get outlined, so an outline always means look here.
