@@ -13,6 +13,7 @@ One bookmark for proofing. **Email** checks the build against the spec sheet. **
 1. Open the email preview page.
 2. Click Digital QA in the bookmarks bar.
 3. Choose the spec sheet, or drop the .xlsx onto the panel. It reads every tab.
+   To swap sheets, press Change. Nothing is compared while the loader is open, so no result on screen is ever left over from the sheet you are replacing. Cancel puts the old one back.
 4. Next email, just click the bookmark. The spec stays loaded and the check runs on its own.
 5. Click the x or the bookmark again to close.
 
@@ -107,7 +108,7 @@ A call to action built as a live text button carries no image, so it carries no 
 
 Click any alt text row and the tool scrolls that image into view, flashes it and opens a box with the copy and where it was found. Copy, Mark done and Next work as they do on a link. Open is absent, since alt text has no destination.
 
-Mark it done once you have checked the copy against the image. The tool compares the words exactly. What it cannot tell you is whether the right alt is on the right image, and that is what you are confirming. Outlines follow the link rule: red dashed until marked, green once marked, amber for copy the sheet does not carry. An image that is also a link carries both checks and has one box for both. Clicking the image and clicking its alt row open the same thing: the URL, the alt copy, and two marks, Mark link done and Mark alt done. Its outline turns green only once both are marked.
+Mark it done once you have checked the copy against the image. The tool compares the words exactly. What it cannot tell you is whether the right alt is on the right image, and that is what you are confirming. Outlines follow the link rule: red dashed until marked, green once marked, amber for copy the sheet does not carry. A row stays amber while its copy is not on the sheet, however many times you mark it. Marking says you looked at it. Only the sheet can approve it. An image that is also a link carries both checks and has one box for both. Clicking the image and clicking its alt row open the same thing: the URL, the alt copy, and two marks, Mark link done and Mark alt done. Its outline turns green only once both are marked.
 
 **Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
 
