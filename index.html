@@ -73,6 +73,47 @@
     <p class="hint">The sheet is read in your browser. Nothing is uploaded and the file is never changed.</p>
   </div>
 
+  <div class="card">
+    <h2>What a result means</h2>
+    <p>The spec sheet is the authority. A green <strong>PASS</strong> means everything the sheet asks for is present in the build and matches. Nothing more is claimed.</p>
+    <table class="checks">
+      <tr><th>Verdict</th><th>What it means</th><th>Compared?</th></tr>
+      <tr><td><span class="badge green">PASS</span></td><td>Every item on the sheet is there and correct, and you have clicked through the links. Green never appears for something the sheet is silent about, or for a pass you have not finished.</td><td>yes</td></tr>
+      <tr><td><span class="badge amber">CHECK</span></td><td>It is all there, but something wants a look, or the pass is not finished yet.</td><td>yes</td></tr>
+      <tr><td><span class="badge red">FAIL</span></td><td>Something the sheet asks for is missing from the build.</td><td>yes</td></tr>
+      <tr><td><span class="badge red">WRONG SHEET</span></td><td>The footer code and the sheet's Veeva code disagree.</td><td>nothing</td></tr>
+      <tr><td><span class="badge amber">UNCONFIRMED</span></td><td>The email carries no job code, so the tool cannot tell whether this sheet applies. About one email in twelve.</td><td>nothing</td></tr>
+      <tr><td><span class="badge grey">NO SPEC</span></td><td>No sheet loaded yet. Deliberately not green.</td><td>nothing</td></tr>
+    </table>
+    <p class="hint">Neither blocking state can be overridden. Load the spec sheet for the email you are looking at.</p>
+
+    <h3>Where the link list comes from</h3>
+    <p>The checklist is <strong>every link found in the email</strong>, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot.</p>
+    <p>Every row says which side it came from, so you can see at a glance what is covered:</p>
+    <table class="checks">
+      <tr><th>Row says</th><th>Meaning</th><th>Reads as</th></tr>
+      <tr><td>spec + email</td><td>On the sheet and in the build. This is what you want.</td><td>fine</td></tr>
+      <tr><td>email only</td><td>In the build, on no sheet row. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.</td><td>amber</td></tr>
+      <tr><td>spec only</td><td>On the sheet with nothing in the build. Grouped under <strong>Not in the build</strong>, because there is nothing to click and nothing to mark done. This is the one thing clicking through can never find.</td><td>fails</td></tr>
+    </table>
+
+    <h3>What is not checked</h3>
+    <ul>
+      <li><strong>Phone, email and in-page links.</strong> Skipped, because no spec sheet covers them.</li>
+      <li><strong>Subject lines.</strong> They live in the sending platform, not in the HTML.</li>
+      <li><strong>Whether a destination loads.</strong> No bookmarklet can answer that. A live page and a dead one look identical to it. That is what <strong>Open</strong> is for, and why the done marks exist.</li>
+      <li><strong>Which fragments actually ship.</strong> The rep chooses at send time. A link found in a fragment is available, not confirmed present.</li>
+      <li><strong>Anything the sheet does not mention.</strong> Body copy, layout, ISI wording. A pass covers the sheet and nothing beyond it.</li>
+    </ul>
+
+    <h3>Amber until you have finished</h3>
+    <p>A link counter sitting at <code>0 of 10</code> is amber, not green, even when nothing is wrong. Green would say the pass is complete when it has not started. It turns green when every link is marked done, and the same applies to the fragment counter.</p>
+    <p>Links with no destination to open, a <code>{{token}}</code> resolved at send time for instance, are listed under <strong>Nothing to open</strong> and left out of the count. There is nothing to verify, so requiring a tick would hold the row amber forever.</p>
+
+    <h3>What the counter is</h3>
+    <p><code>3 of 9 done</code> is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.</p>
+  </div>
+
   <details class="card">
     <summary>The checks at a glance</summary>
     <p>A check only appears when the spec sheet asks for it. That is what keeps one client's requirements off another client's job.</p>
@@ -124,8 +165,6 @@
     <p>Read from the email footer, then checked against the Veeva code on the spec sheet. The detail names both, <code>in email</code> and <code>on spec</code>.</p>
   </details>
 
-
-
   <details class="card">
     <summary>Fragments</summary>
     <p>Some builds pull extra blocks in at send time. That markup is not in the file you are previewing, so the tool cannot read it, and it will not pretend otherwise.</p>
@@ -165,47 +204,6 @@
     <p><strong>Title tags</strong> reports any <code>title</code> attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads <em>none, as required</em> when the build is clean.</p>
     <p class="hint">Images with no alt at all are counted quietly, since a decorative image is allowed an empty alt.</p>
   </details>
-
-  <div class="card">
-    <h2>What a result means</h2>
-    <p>The spec sheet is the authority. A green <strong>PASS</strong> means everything the sheet asks for is present in the build and matches. Nothing more is claimed.</p>
-    <table class="checks">
-      <tr><th>Verdict</th><th>What it means</th><th>Compared?</th></tr>
-      <tr><td><span class="badge green">PASS</span></td><td>Every item on the sheet is there and correct, and you have clicked through the links. Green never appears for something the sheet is silent about, or for a pass you have not finished.</td><td>yes</td></tr>
-      <tr><td><span class="badge amber">CHECK</span></td><td>It is all there, but something wants a look, or the pass is not finished yet.</td><td>yes</td></tr>
-      <tr><td><span class="badge red">FAIL</span></td><td>Something the sheet asks for is missing from the build.</td><td>yes</td></tr>
-      <tr><td><span class="badge red">WRONG SHEET</span></td><td>The footer code and the sheet's Veeva code disagree.</td><td>nothing</td></tr>
-      <tr><td><span class="badge amber">UNCONFIRMED</span></td><td>The email carries no job code, so the tool cannot tell whether this sheet applies. About one email in twelve.</td><td>nothing</td></tr>
-      <tr><td><span class="badge grey">NO SPEC</span></td><td>No sheet loaded yet. Deliberately not green.</td><td>nothing</td></tr>
-    </table>
-    <p class="hint">Neither blocking state can be overridden. Load the spec sheet for the email you are looking at.</p>
-
-    <h3>Where the link list comes from</h3>
-    <p>The checklist is <strong>every link found in the email</strong>, not a copy of the sheet. Each row is named by the sheet's description when the tool can match it, and by the link's own text or image alt when it cannot.</p>
-    <p>Every row says which side it came from, so you can see at a glance what is covered:</p>
-    <table class="checks">
-      <tr><th>Row says</th><th>Meaning</th><th>Reads as</th></tr>
-      <tr><td>spec + email</td><td>On the sheet and in the build. This is what you want.</td><td>fine</td></tr>
-      <tr><td>email only</td><td>In the build, on no sheet row. Usually approved boilerplate such as unsubscribe or privacy, which is why the common ones are listed quietly. Anything else is worth a look, because a destination nobody approved is worth knowing about.</td><td>amber</td></tr>
-      <tr><td>spec only</td><td>On the sheet with nothing in the build. Grouped under <strong>Not in the build</strong>, because there is nothing to click and nothing to mark done. This is the one thing clicking through can never find.</td><td>fails</td></tr>
-    </table>
-
-    <h3>What is not checked</h3>
-    <ul>
-      <li><strong>Phone, email and in-page links.</strong> Skipped, because no spec sheet covers them.</li>
-      <li><strong>Subject lines.</strong> They live in the sending platform, not in the HTML.</li>
-      <li><strong>Whether a destination loads.</strong> No bookmarklet can answer that. A live page and a dead one look identical to it. That is what <strong>Open</strong> is for, and why the done marks exist.</li>
-      <li><strong>Which fragments actually ship.</strong> The rep chooses at send time. A link found in a fragment is available, not confirmed present.</li>
-      <li><strong>Anything the sheet does not mention.</strong> Body copy, layout, ISI wording. A pass covers the sheet and nothing beyond it.</li>
-    </ul>
-
-    <h3>Amber until you have finished</h3>
-    <p>A link counter sitting at <code>0 of 10</code> is amber, not green, even when nothing is wrong. Green would say the pass is complete when it has not started. It turns green when every link is marked done, and the same applies to the fragment counter.</p>
-    <p>Links with no destination to open, a <code>{{token}}</code> resolved at send time for instance, are listed under <strong>Nothing to open</strong> and left out of the count. There is nothing to verify, so requiring a tick would hold the row amber forever.</p>
-
-    <h3>What the counter is</h3>
-    <p><code>3 of 9 done</code> is a record of what you clicked through, not a second opinion. Mark nine links done without opening any and it will say nine. It tracks your progress, it does not verify it.</p>
-  </div>
 
   <details class="card">
     <summary>The report</summary>
