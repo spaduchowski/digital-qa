@@ -1,0 +1,1121 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Spec Sheet Builder</title>
+<style>
+  :root {
+    --ground: #f1f5f9; --card: #ffffff; --ink: #0f172a; --dim: #64748b;
+    --edge: #dbe3ec; --edge2: #c3cedb;
+    --blue: #2563eb; --blue-soft: #eff4ff;
+    --ok: #15803d; --ok-soft: #eefaf1;
+    --wait: #b45309; --wait-soft: #fef6e7;
+    --mono: Menlo, Consolas, "SF Mono", monospace;
+  }
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "Segoe UI", Helvetica, Arial, sans-serif;
+    margin: 0; background: var(--ground); color: var(--ink); line-height: 1.55;
+    font-size: 15px;
+  }
+  a { color: var(--blue); }
+
+  /* ---------- chrome ---------- */
+  header {
+    position: sticky; top: 0; z-index: 20; background: #ffffffee;
+    backdrop-filter: saturate(1.6) blur(8px);
+    border-bottom: 1px solid var(--edge); padding: 10px 22px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  header h1 { font-size: 16px; margin: 0; font-weight: 650; letter-spacing: -.01em; }
+  header .jobline { color: var(--dim); font-size: 13px; font-family: var(--mono); }
+  header .spacer { flex: 1; }
+
+  .pill {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+    padding: 3px 10px; border-radius: 999px; border: 1px solid transparent; white-space: nowrap;
+  }
+  .pill.ok { background: var(--ok-soft); color: var(--ok); border-color: #bfe6cb; }
+  .pill.wait { background: var(--wait-soft); color: var(--wait); border-color: #f3ddb4; }
+  .pill.empty { background: #f1f5f9; color: var(--dim); border-color: var(--edge2); }
+
+  button {
+    font: inherit; font-size: 14px; cursor: pointer; border-radius: 7px;
+    border: 1px solid var(--edge2); background: #fff; color: var(--ink);
+    padding: 6px 13px; font-weight: 500;
+  }
+  button:hover { border-color: #94a3b8; }
+  button.primary { background: var(--blue); border-color: var(--blue); color: #fff; font-weight: 600; }
+  button.primary:hover { background: #1d4ed8; }
+  button.quiet { border: none; background: none; color: var(--blue); padding: 2px 4px; font-size: 13px; }
+  button.quiet:hover { text-decoration: underline; }
+  button.danger { border: none; background: none; color: var(--dim); padding: 2px 6px; font-size: 13px; }
+  button.danger:hover { color: #b91c1c; }
+  button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-visible {
+    outline: 2px solid var(--blue); outline-offset: 1px;
+  }
+
+  /* ---------- layout ---------- */
+  .wrap { display: grid; grid-template-columns: minmax(0,1fr) 250px; gap: 24px; padding: 24px 22px 90px; max-width: 1180px; margin: 0 auto; align-items: start; }
+  @media (max-width: 900px) { .wrap { grid-template-columns: minmax(0,1fr); } .rail { order: -1; position: static !important; } }
+
+  section.card {
+    background: var(--card); border: 1px solid var(--edge); border-radius: 10px;
+    padding: 18px 20px; margin-bottom: 16px;
+  }
+  section.card > h2 {
+    font-size: 15px; margin: 0 0 2px; font-weight: 650;
+    display: flex; align-items: center; gap: 10px;
+  }
+  .guide { color: var(--dim); font-size: 13px; margin: 0 0 14px; }
+
+  /* ---------- fields ---------- */
+  .field { margin-bottom: 13px; }
+  .field > label, .flabel {
+    display: block; font-size: 12px; font-weight: 600; color: #475569;
+    letter-spacing: .02em; text-transform: uppercase; margin-bottom: 4px;
+  }
+  input[type=text], input[type=url], select, textarea {
+    width: 100%; font: inherit; font-size: 14px; padding: 7px 10px;
+    border: 1px solid var(--edge2); border-radius: 7px; background: #fff; color: var(--ink);
+  }
+  textarea { resize: vertical; min-height: 62px; }
+  /* an example must never look like an answer. this form's whole job is to stop
+     unknown from reading as done, and that starts at the placeholder. */
+  ::placeholder { color: #a4b1c2; opacity: 1; font-style: italic; }
+  .row { display: grid; gap: 12px; }
+  .row.two { grid-template-columns: 1fr 1fr; }
+  .row.three { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 620px) { .row.two, .row.three { grid-template-columns: 1fr; } }
+
+  .understood {
+    font-size: 12.5px; color: var(--dim); margin-top: 4px; font-family: var(--mono);
+    word-break: break-all;
+  }
+  .understood b { color: var(--ink); font-weight: 600; }
+
+  /* ---------- repeating items ---------- */
+  .item {
+    border: 1px solid var(--edge); border-radius: 9px; padding: 13px 14px;
+    margin-bottom: 10px; background: #fcfdfe;
+  }
+  .item.pending { background: var(--wait-soft); border-color: #f0dcb8; }
+  .itemhead {
+    display: flex; align-items: center; gap: 9px; margin-bottom: 9px;
+    font-size: 12px; font-weight: 600; color: var(--dim);
+    text-transform: uppercase; letter-spacing: .03em;
+  }
+  .itemhead .spacer { flex: 1; }
+  .dflt { display: inline-flex; align-items: center; gap: 5px; font-size: 13px; color: var(--dim); text-transform: none; letter-spacing: 0; font-weight: 500; cursor: pointer; }
+
+  /* ---------- the consequence line ---------- */
+  .consequence {
+    margin-top: 9px; padding: 9px 11px; border-radius: 7px;
+    background: var(--blue-soft); border: 1px solid #d5e2fb;
+    font-family: var(--mono); font-size: 12.5px; line-height: 1.5; word-break: break-all;
+  }
+  .consequence .cap {
+    display: block; font-family: -apple-system, "Segoe UI", sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+    color: #4b6bb5; margin-bottom: 4px;
+  }
+  .consequence .anchor { background: #fde68a; border-radius: 3px; padding: 0 2px; font-weight: 700; }
+  .consequence .utm { color: #64748b; }
+  .consequence.blank { background: #f8fafc; border-color: var(--edge); color: var(--dim); }
+
+  .modes { display: inline-flex; border: 1px solid var(--edge2); border-radius: 7px; overflow: hidden; }
+  .modes button { border: none; border-radius: 0; padding: 5px 12px; font-size: 13px; background: #fff; color: var(--dim); }
+  .modes button.on { background: var(--blue); color: #fff; font-weight: 600; }
+  .modes button + button { border-left: 1px solid var(--edge2); }
+
+  /* ---------- rail ---------- */
+  .rail { position: sticky; top: 66px; }
+  .rail .card { background: var(--card); border: 1px solid var(--edge); border-radius: 10px; padding: 14px 15px; }
+  .rail h3 { font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: var(--dim); margin: 0 0 10px; }
+  .rail ol { list-style: none; margin: 0; padding: 0; }
+  .rail li { display: flex; align-items: center; gap: 8px; font-size: 13.5px; padding: 3px 0; }
+  .rail li a { color: inherit; text-decoration: none; flex: 1; }
+  .rail li a:hover { color: var(--blue); }
+  .rail .mark { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+  .rail .mark.ok { background: var(--ok); }
+  .rail .mark.wait { background: var(--wait); }
+  .rail .mark.empty { background: #cbd5e1; }
+  .rail .hint { font-size: 12.5px; color: var(--dim); margin: 12px 0 0; line-height: 1.45; }
+
+  .footbar {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 20;
+    background: #ffffffee; backdrop-filter: blur(8px);
+    border-top: 1px solid var(--edge); padding: 10px 22px;
+    display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
+  }
+  .footbar .spacer { flex: 1; }
+  .footbar .saved { font-size: 12.5px; color: var(--dim); }
+
+  .empty-note { color: var(--dim); font-size: 13.5px; padding: 6px 0 10px; }
+  .pendbox { display: grid; grid-template-columns: 1fr 150px; gap: 10px; margin-top: 8px; }
+  @media (max-width: 620px) { .pendbox { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Spec Sheet Builder</h1>
+  <span class="jobline" id="jobline">no job yet</span>
+  <span class="spacer"></span>
+  <span id="overall" class="pill empty">nothing filled in</span>
+</header>
+
+<div class="wrap">
+  <main>
+
+    <!-- 1. the job -->
+    <section class="card" id="s-job">
+      <h2>The job</h2>
+      <p class="guide">These five answers decide what the rest of this form asks you for.</p>
+      <div class="row two">
+        <div class="field">
+          <label for="f-veeva">Veeva code</label>
+          <input type="text" id="f-veeva" placeholder="PP-AXS-US-2600004" autocomplete="off">
+          <div class="understood" id="u-veeva"></div>
+        </div>
+        <div class="field">
+          <label for="f-vp">VP number</label>
+          <input type="text" id="f-vp" placeholder="915414" autocomplete="off">
+          <div class="understood" id="u-vp"></div>
+        </div>
+      </div>
+      <div class="row three">
+        <div class="field">
+          <label for="f-brand">Brand</label>
+          <input type="text" id="f-brand" placeholder="Symbravo" autocomplete="off">
+        </div>
+        <div class="field">
+          <label for="f-type">Email type</label>
+          <select id="f-type">
+            <option value="">choose one</option>
+            <option value="SFMC">SFMC</option>
+            <option value="RTE">RTE (Veeva)</option>
+            <option value="3rd-party">Third party</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-audience">Audience</label>
+          <select id="f-audience">
+            <option value="">choose one</option>
+            <option value="HCP">HCP</option>
+            <option value="DTC">Patient / DTC</option>
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="f-campaign">Campaign name, for tracking</label>
+        <input type="text" id="f-campaign" placeholder="symbravo-hcp-oms-new-resource" autocomplete="off">
+        <div class="understood" id="u-campaign">Written once here, then used on every link below.</div>
+      </div>
+    </section>
+
+    <!-- 2. subject lines -->
+    <section class="card" id="s-subjects">
+      <h2>Subject lines <span id="p-subjects" class="pill empty">none yet</span></h2>
+      <p class="guide">One line per approved subject. Mark the one that goes out by default.</p>
+      <div id="list-subjects"></div>
+      <div id="pend-subjects"></div>
+      <button class="quiet" data-add="subjects">+ Add a subject line</button>
+      <button class="quiet" data-pend="subjects">Not approved yet</button>
+    </section>
+
+    <!-- 3. preheaders -->
+    <section class="card" id="s-preheaders">
+      <h2>Preheaders <span id="p-preheaders" class="pill empty">none yet</span></h2>
+      <p class="guide">The line that shows after the subject in the inbox. If you list more than one, say what that means.</p>
+      <div class="field" id="mode-preheaders-wrap">
+        <span class="flabel">What a list of preheaders means</span>
+        <div class="modes" id="mode-preheaders">
+          <button type="button" data-mode="one-of">Pick one at send</button>
+          <button type="button" data-mode="all-of">The build carries them all</button>
+        </div>
+      </div>
+      <div id="list-preheaders"></div>
+      <div id="pend-preheaders"></div>
+      <button class="quiet" data-add="preheaders">+ Add a preheader</button>
+      <button class="quiet" data-pend="preheaders">Not approved yet</button>
+    </section>
+
+    <!-- 4. links -->
+    <section class="card" id="s-links">
+      <h2>Links <span id="p-links" class="pill empty">none yet</span></h2>
+      <p class="guide">Write the plain destination. The tracked version is built for you and shown underneath, so you can see exactly what will be clicked.</p>
+      <div id="list-links"></div>
+      <button class="quiet" data-add="links">+ Add a link</button>
+    </section>
+
+    <!-- 5. fragments -->
+    <section class="card" id="s-fragments">
+      <h2>Fragments <span id="p-fragments" class="pill empty">none</span></h2>
+      <p class="guide">Named blocks the rep can add at send time. Only needed if a link above lives in one.</p>
+      <div id="list-fragments"></div>
+      <button class="quiet" data-add="fragments">+ Add a fragment</button>
+    </section>
+
+    <!-- 6. tracking -->
+    <section class="card" id="s-tracking" hidden>
+      <h2>Tracking <span id="p-tracking" class="pill empty">not set</span></h2>
+      <p class="guide">SFMC sends carry an account level tracking block. It is the same on every job for this account.</p>
+      <div class="field">
+        <label class="dflt" style="text-transform:none;letter-spacing:0;font-size:14px;">
+          <input type="checkbox" id="f-tracking" style="width:auto;"> This email includes the tracking block
+        </label>
+      </div>
+    </section>
+
+    <!-- 7. alt text -->
+    <section class="card" id="s-alts">
+      <h2>Alt text and title tags <span id="p-alts" class="pill empty">none stated</span></h2>
+      <p class="guide">List alt copy only where the client specifies it. Anything you list here gets checked word for word.</p>
+      <div id="list-alts"></div>
+      <div id="pend-alts"></div>
+      <button class="quiet" data-add="alts">+ Add alt text</button>
+      <button class="quiet" data-pend="alts">Not decided yet</button>
+      <div class="field" style="margin-top:14px;">
+        <span class="flabel">Title tags on links</span>
+        <div class="modes" id="mode-titleTags">
+          <button type="button" data-mode="allowed">Allowed</button>
+          <button type="button" data-mode="none">Not allowed on this brand</button>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <aside class="rail">
+    <div class="card">
+      <h3>Where you are</h3>
+      <ol id="rail"></ol>
+      <p class="hint" id="railhint"></p>
+    </div>
+  </aside>
+</div>
+
+<div class="footbar">
+  <button id="btn-open">Open a draft</button>
+  <input type="file" id="file-open" accept=".json,application/json" hidden>
+  <button id="btn-clear" class="danger">Start over</button>
+  <span class="saved" id="saved"></span>
+  <span class="spacer"></span>
+  <button class="primary" id="btn-download">Download spec file</button>
+</div>
+
+<script>
+(function () {
+  'use strict';
+
+  var KEY = 'dq-spec-draft-v1';
+
+  var doc = blank();
+  function blank() {
+    return {
+      schema: 1, generated: '', revision: 0,
+      job: { veeva: '', vp: '', brand: '', type: '', audience: '', campaign: '' },
+      subjects: { mode: 'one-of', options: [], pending: null },
+      preheaders: { mode: 'one-of', options: [], pending: null },
+      links: [], fragments: [], tracking: { included: false },
+      alts: [], altsPending: null, titleTags: 'allowed'
+    };
+  }
+
+  // ---------- small helpers ----------
+  function $(id) { return document.getElementById(id); }
+  function el(tag, cls, txt) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (txt !== undefined) n.textContent = txt;
+    return n;
+  }
+  function esc(s) {
+    return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function collapse(s) { return String(s || '').replace(/\s+/g, ' ').trim(); }
+  function slug(s) {
+    return String(s || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '').slice(0, 40);
+  }
+
+  // a destination typed without a scheme is the single most common thing wrong with a
+  // spec sheet cell. correct it and say what was understood, rather than refusing it.
+  function normUrl(raw) {
+    var s = String(raw || '').trim().replace(/^[<"']+|[>"'.,;]+$/g, '');
+    if (!s) return { url: '', changed: false, kind: 'empty' };
+    if (/^mailto:/i.test(s)) return { url: s, changed: s !== raw.trim(), kind: 'mail' };
+    if (/^tel:/i.test(s)) return { url: s, changed: s !== raw.trim(), kind: 'tel' };
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(s)) {
+      var fixed = s.replace(/^HTTP(S?):\/\//i, function (m, g) { return 'http' + (g ? 's' : '') + '://'; });
+      return { url: fixed, changed: fixed !== raw.trim(), kind: 'ok' };
+    }
+    if (/^[a-z0-9-]+(\.[a-z0-9-]+)+([\/?#].*)?$/i.test(s)) {
+      return { url: 'https://' + s, changed: true, kind: 'scheme-added' };
+    }
+    return { url: s, changed: s !== raw.trim(), kind: 'unclear' };
+  }
+
+  // the whole reason the structured file exists: the tracked URL is assembled here,
+  // with the fragment carried through, and shown to the person writing the sheet.
+  function assemble(link) {
+    if (!link.url) return null;
+    var m = /^([^#]*)(#.*)?$/.exec(link.url);
+    var base = m[1], hash = m[2] || '';
+    var q = base.indexOf('?') >= 0;
+    var parts = [];
+    var utm = utmFor(link);
+    for (var k in utm) if (utm[k]) parts.push('utm_' + k + '=' + encodeURIComponent(utm[k]));
+    if (!parts.length) return { base: base, query: '', hash: hash, full: link.url };
+    var query = (q ? '&' : '?') + parts.join('&');
+    return { base: base, query: query, hash: hash, full: base + query + hash };
+  }
+  function utmFor(link) {
+    return {
+      source: doc.job.veeva || '',
+      medium: 'email',
+      campaign: doc.job.campaign || '',
+      content: link.content || slug(link.desc) || ''
+    };
+  }
+
+  // ---------- persistence ----------
+  var saveTimer = null;
+  function touch() {
+    render();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(function () {
+      try {
+        localStorage.setItem(KEY, JSON.stringify(doc));
+        $('saved').textContent = 'Draft saved in this browser · ' + new Date().toLocaleTimeString();
+      } catch (e) { $('saved').textContent = 'Could not save a draft in this browser'; }
+    }, 400);
+  }
+  function restore() {
+    try {
+      var raw = localStorage.getItem(KEY);
+      if (!raw) return false;
+      var d = JSON.parse(raw);
+      if (d && d.job) { doc = merge(blank(), d); return true; }
+    } catch (e) {}
+    return false;
+  }
+  function merge(base, d) {
+    for (var k in d) if (Object.prototype.hasOwnProperty.call(d, k)) base[k] = d[k];
+    if (!base.job) base.job = blank().job;
+    ['subjects', 'preheaders'].forEach(function (k) {
+      if (!base[k] || !base[k].options) base[k] = { mode: 'one-of', options: [], pending: null };
+    });
+    ['links', 'fragments', 'alts'].forEach(function (k) { if (!base[k]) base[k] = []; });
+    if (!base.tracking) base.tracking = { included: false };
+    return base;
+  }
+
+  // ---------- text list sections (subjects, preheaders) ----------
+  function renderTextList(name) {
+    var host = $('list-' + name);
+    host.innerHTML = '';
+    var group = doc[name];
+    if (group.pending) { return; }
+    if (!group.options.length) {
+      host.appendChild(el('div', 'empty-note', 'Nothing listed yet.'));
+      return;
+    }
+    group.options.forEach(function (opt, i) {
+      var box = el('div', 'item');
+      var head = el('div', 'itemhead');
+      head.appendChild(el('span', null, (name === 'subjects' ? 'Subject ' : 'Preheader ') + (i + 1)));
+      head.appendChild(el('span', 'spacer'));
+
+      var lab = el('label', 'dflt');
+      if (group.options.length < 2) lab.style.display = 'none';
+      var rb = el('input');
+      rb.type = 'radio'; rb.name = 'dflt-' + name; rb.checked = !!opt.default;
+      rb.style.width = 'auto';
+      rb.addEventListener('change', function () {
+        group.options.forEach(function (o) { o.default = false; });
+        opt.default = true; touch();
+      });
+      lab.appendChild(rb);
+      lab.appendChild(document.createTextNode('default'));
+      head.appendChild(lab);
+
+      var del = el('button', 'danger', 'Remove');
+      del.addEventListener('click', function () {
+        group.options.splice(i, 1);
+        if (group.options.length && !group.options.some(function (o) { return o.default; })) {
+          group.options[0].default = true;
+        }
+        touch();
+      });
+      head.appendChild(del);
+      box.appendChild(head);
+
+      var ta = el('textarea');
+      ta.value = opt.text || '';
+      ta.placeholder = name === 'subjects'
+        ? 'New Axsome OnMySide resource now available'
+        : 'Quick Start Guide resource now available.';
+      ta.addEventListener('input', function () { opt.text = ta.value; countOnly(); });
+      ta.addEventListener('blur', function () {
+        opt.text = collapse(ta.value); ta.value = opt.text; touch();
+      });
+      box.appendChild(ta);
+
+      var meter = el('div', 'understood');
+      var n = collapse(ta.value).length;
+      meter.innerHTML = n
+        ? n + ' characters' + (n > 100 ? ' &middot; inboxes usually cut off near 100' : '')
+        : '';
+      box.appendChild(meter);
+
+      host.appendChild(box);
+    });
+  }
+
+  // ---------- pending ----------
+  // "not known yet" is a state the file records, with an owner. it is never a blank cell
+  // and never looks finished.
+  function renderPending(name, label) {
+    var host = $('pend-' + name);
+    host.innerHTML = '';
+    var p = name === 'alts' ? doc.altsPending : doc[name].pending;
+    if (!p) return;
+    var box = el('div', 'item pending');
+    var head = el('div', 'itemhead');
+    head.appendChild(el('span', null, 'Not known yet'));
+    head.appendChild(el('span', 'spacer'));
+    var un = el('button', 'danger', 'I have the answer');
+    un.addEventListener('click', function () { setPending(name, null); });
+    head.appendChild(un);
+    box.appendChild(head);
+
+    var grid = el('div', 'pendbox');
+    var note = el('input'); note.type = 'text';
+    note.placeholder = 'What is it waiting on? e.g. waiting on MLR';
+    note.value = p.note || '';
+    note.addEventListener('input', function () { p.note = note.value; countOnly(); });
+    note.addEventListener('blur', touch);
+    var own = el('input'); own.type = 'text';
+    own.placeholder = 'Who owns it';
+    own.value = p.owner || '';
+    own.addEventListener('input', function () { p.owner = own.value; countOnly(); });
+    own.addEventListener('blur', touch);
+    grid.appendChild(note); grid.appendChild(own);
+    box.appendChild(grid);
+    box.appendChild(el('div', 'understood', label + ' will be marked pending in the spec file, not left blank.'));
+    host.appendChild(box);
+  }
+  function setPending(name, val) {
+    if (name === 'alts') doc.altsPending = val; else doc[name].pending = val;
+    touch();
+  }
+
+  // ---------- links ----------
+  function renderLinks() {
+    var host = $('list-links');
+    host.innerHTML = '';
+    if (!doc.links.length) {
+      host.appendChild(el('div', 'empty-note', 'No links yet. Every clickable thing in the email belongs here, including the footer.'));
+      return;
+    }
+    doc.links.forEach(function (link, i) {
+      host.appendChild(linkCard(link, i));
+    });
+  }
+
+  function linkCard(link, i) {
+    var box = el('div', 'item' + (link.pending ? ' pending' : ''));
+    var head = el('div', 'itemhead');
+    head.appendChild(el('span', null, 'Link ' + (i + 1)));
+    head.appendChild(el('span', 'spacer'));
+    if (i > 0) {
+      var up = el('button', 'danger', 'Move up');
+      up.addEventListener('click', function () {
+        var t = doc.links[i - 1]; doc.links[i - 1] = doc.links[i]; doc.links[i] = t; touch();
+      });
+      head.appendChild(up);
+    }
+    var del = el('button', 'danger', 'Remove');
+    del.addEventListener('click', function () { doc.links.splice(i, 1); touch(); });
+    head.appendChild(del);
+    box.appendChild(head);
+
+    // what it is
+    var f1 = el('div', 'field');
+    f1.appendChild(el('label', null, 'What the reader clicks'));
+    var d = el('input'); d.type = 'text'; d.value = link.desc || '';
+    d.placeholder = 'Download the Quick Start Guide';
+    d.addEventListener('input', function () { link.desc = d.value; redrawConsequence(box, link); countOnly(); });
+    d.addEventListener('blur', function () { link.desc = collapse(d.value); d.value = link.desc; touch(); });
+    f1.appendChild(d);
+    box.appendChild(f1);
+
+    // where it goes
+    var f2 = el('div', 'field');
+    f2.appendChild(el('label', null, 'Where it goes'));
+    var u = el('input'); u.type = 'text'; u.value = link.url || '';
+    u.placeholder = 'https://www.symbravohcp.com/#isi';
+    u.disabled = !!link.pending;
+    // the correction has to live on the link, not on this node: blur triggers a
+    // re-render, which would throw away anything written straight into the DOM.
+    var uNote = el('div', 'understood');
+    uNote.innerHTML = link.note || '';
+    u.addEventListener('input', function () {
+      link.url = u.value.trim(); link.note = ''; uNote.innerHTML = '';
+      redrawConsequence(box, link); countOnly();
+    });
+    u.addEventListener('blur', function () {
+      var res = normUrl(u.value);
+      link.url = res.url; u.value = res.url;
+      link.note = !res.changed ? ''
+        : res.kind === 'scheme-added'
+          ? 'Understood as <b>' + esc(res.url) + '</b> &middot; every address needs https://, so it was added'
+        : res.kind === 'unclear'
+          ? 'This does not look like a web address yet.'
+          : 'Understood as <b>' + esc(res.url) + '</b>';
+      touch();
+    });
+    f2.appendChild(u);
+    f2.appendChild(uNote);
+    box.appendChild(f2);
+
+    // what it will actually be
+    var cons = el('div', 'consequence');
+    cons.setAttribute('data-cons', '1');
+    box.appendChild(cons);
+
+    // placement
+    var g = el('div', 'row three');
+    g.appendChild(selField('Section of the email', link.section || 'main',
+      [['main', 'Main body'], ['footer', 'Footer']],
+      function (v) { link.section = v; touch(); }));
+    g.appendChild(selField('Where it lives', link.where || 'email',
+      [['email', 'In the email'], ['fragment', 'In a fragment']],
+      function (v) { link.where = v; if (v !== 'fragment') link.fragment = null; touch(); }));
+    if (link.where === 'fragment') {
+      var opts = [['', 'choose a fragment']].concat(doc.fragments.map(function (fr) { return [fr.name, fr.name]; }));
+      g.appendChild(selField('Which fragment', link.fragment || '', opts,
+        function (v) { link.fragment = v || null; touch(); }));
+    } else {
+      var tagf = el('div', 'field');
+      tagf.appendChild(el('label', null, 'Tag for this link'));
+      var t = el('input'); t.type = 'text';
+      t.value = link.content || '';
+      t.placeholder = slug(link.desc) || 'auto from the wording above';
+      t.addEventListener('input', function () { link.content = slug(t.value); redrawConsequence(box, link); });
+      t.addEventListener('blur', function () { t.value = link.content || ''; touch(); });
+      tagf.appendChild(t);
+      g.appendChild(tagf);
+    }
+    box.appendChild(g);
+
+    // not known yet
+    var pf = el('div');
+    if (link.pending) {
+      var grid = el('div', 'pendbox');
+      var note = el('input'); note.type = 'text';
+      note.placeholder = 'What is the destination waiting on?';
+      note.value = link.pending.note || '';
+      note.addEventListener('input', function () { link.pending.note = note.value; });
+      note.addEventListener('blur', touch);
+      var own = el('input'); own.type = 'text'; own.placeholder = 'Who owns it';
+      own.value = link.pending.owner || '';
+      own.addEventListener('input', function () { link.pending.owner = own.value; });
+      own.addEventListener('blur', touch);
+      grid.appendChild(note); grid.appendChild(own);
+      pf.appendChild(grid);
+      var back = el('button', 'quiet', 'I have the destination');
+      back.addEventListener('click', function () { link.pending = null; touch(); });
+      pf.appendChild(back);
+    } else {
+      var mark = el('button', 'quiet', 'Destination not known yet');
+      mark.addEventListener('click', function () { link.pending = { note: '', owner: '' }; touch(); });
+      pf.appendChild(mark);
+    }
+    box.appendChild(pf);
+
+    redrawConsequence(box, link);
+    return box;
+  }
+
+  function selField(label, val, opts, onchange) {
+    var f = el('div', 'field');
+    f.appendChild(el('label', null, label));
+    var s = el('select');
+    opts.forEach(function (o) {
+      var op = el('option', null, o[1]); op.value = o[0];
+      if (o[0] === val) op.selected = true;
+      s.appendChild(op);
+    });
+    s.addEventListener('change', function () { onchange(s.value); });
+    f.appendChild(s);
+    return f;
+  }
+
+  // show the consequence, not the rule. an anchor lost in tagging is invisible in a
+  // spreadsheet cell and obvious here.
+  function redrawConsequence(box, link) {
+    var cons = box.querySelector('[data-cons]');
+    if (!cons) return;
+    if (link.pending) {
+      cons.className = 'consequence blank';
+      cons.innerHTML = '<span class="cap">What gets built</span>Nothing yet. This link is marked as not known.';
+      return;
+    }
+    var a = assemble(link);
+    if (!a) {
+      cons.className = 'consequence blank';
+      cons.innerHTML = '<span class="cap">What gets built</span>Fill in the destination above and the tracked link appears here.';
+      return;
+    }
+    cons.className = 'consequence';
+    var h = '<span class="cap">What gets built, and what the reader clicks</span>' +
+      esc(a.base) + '<span class="utm">' + esc(a.query) + '</span>';
+    if (a.hash) h += '<span class="anchor">' + esc(a.hash) + '</span>';
+    var missing = [];
+    if (!doc.job.veeva) missing.push('the Veeva code');
+    if (!doc.job.campaign) missing.push('the campaign name');
+    if (missing.length) {
+      h += '<br><span class="utm">Tracking is incomplete until you fill in ' + missing.join(' and ') + ' at the top.</span>';
+    } else if (a.hash) {
+      h += '<br><span class="utm">The ' + esc(a.hash) + ' at the end is kept. It is what takes the reader to that part of the page.</span>';
+    }
+    cons.innerHTML = h;
+  }
+
+  // ---------- fragments and alts ----------
+  function renderFragments() {
+    var host = $('list-fragments');
+    host.innerHTML = '';
+    if (!doc.fragments.length) {
+      host.appendChild(el('div', 'empty-note', 'None. Most emails have none.'));
+      return;
+    }
+    doc.fragments.forEach(function (fr, i) {
+      var box = el('div', 'item');
+      var head = el('div', 'itemhead');
+      head.appendChild(el('span', null, 'Fragment ' + (i + 1)));
+      head.appendChild(el('span', 'spacer'));
+      var del = el('button', 'danger', 'Remove');
+      del.addEventListener('click', function () {
+        var gone = fr.name;
+        doc.fragments.splice(i, 1);
+        doc.links.forEach(function (l) { if (l.fragment === gone) l.fragment = null; });
+        touch();
+      });
+      head.appendChild(del);
+      box.appendChild(head);
+      var n = el('input'); n.type = 'text'; n.value = fr.name || '';
+      n.placeholder = 'Exactly as the file is named, without .html';
+      n.addEventListener('input', function () { fr.name = n.value.trim(); });
+      n.addEventListener('blur', touch);
+      box.appendChild(n);
+      var own = el('label', 'dflt');
+      own.style.marginTop = '8px'; own.style.display = 'inline-flex';
+      var cb = el('input'); cb.type = 'checkbox'; cb.checked = !!fr.ownJob; cb.style.width = 'auto';
+      cb.addEventListener('change', function () { fr.ownJob = cb.checked; touch(); });
+      own.appendChild(cb);
+      own.appendChild(document.createTextNode('This fragment is its own job, approved separately'));
+      box.appendChild(own);
+      host.appendChild(box);
+    });
+  }
+
+  function renderAlts() {
+    var host = $('list-alts');
+    host.innerHTML = '';
+    if (doc.altsPending) return;
+    if (!doc.alts.length) {
+      host.appendChild(el('div', 'empty-note', 'None stated. Leave it this way unless the client specifies alt copy.'));
+      return;
+    }
+    doc.alts.forEach(function (a, i) {
+      var box = el('div', 'item');
+      var head = el('div', 'itemhead');
+      head.appendChild(el('span', null, 'Alt text ' + (i + 1)));
+      head.appendChild(el('span', 'spacer'));
+      var del = el('button', 'danger', 'Remove');
+      del.addEventListener('click', function () { doc.alts.splice(i, 1); touch(); });
+      head.appendChild(del);
+      box.appendChild(head);
+      var g = el('div', 'row two');
+      var f1 = el('div', 'field');
+      f1.appendChild(el('label', null, 'Which image'));
+      var loc = el('input'); loc.type = 'text'; loc.value = a.location || '';
+      loc.placeholder = 'Header logo';
+      loc.addEventListener('input', function () { a.location = loc.value; });
+      loc.addEventListener('blur', touch);
+      f1.appendChild(loc);
+      var f2 = el('div', 'field');
+      f2.appendChild(el('label', null, 'Exact alt copy'));
+      var tx = el('input'); tx.type = 'text'; tx.value = a.text || '';
+      tx.placeholder = 'SYMBRAVO Logo';
+      tx.addEventListener('input', function () { a.text = tx.value; });
+      tx.addEventListener('blur', function () { a.text = collapse(tx.value); tx.value = a.text; touch(); });
+      f2.appendChild(tx);
+      g.appendChild(f1); g.appendChild(f2);
+      box.appendChild(g);
+      host.appendChild(box);
+    });
+  }
+
+  // ---------- status ----------
+  function statusOf(name) {
+    if (name === 'job') {
+      var j = doc.job;
+      if (!j.veeva && !j.vp && !j.brand && !j.type) return ['empty', 'nothing yet'];
+      if (j.veeva && j.vp && j.brand && j.type && j.audience && j.campaign) return ['ok', 'complete'];
+      return ['wait', 'part filled'];
+    }
+    if (name === 'subjects' || name === 'preheaders') {
+      var g = doc[name];
+      if (g.pending) return ['wait', 'pending'];
+      var real = g.options.filter(function (o) { return collapse(o.text); });
+      if (!real.length) return ['empty', 'none yet'];
+      return ['ok', real.length + (real.length === 1 ? ' line' : ' lines')];
+    }
+    if (name === 'links') {
+      if (!doc.links.length) return ['empty', 'none yet'];
+      var pend = doc.links.filter(function (l) { return l.pending; }).length;
+      var bad = doc.links.filter(function (l) {
+        return !l.pending && (!collapse(l.desc) || !l.url || (l.where === 'fragment' && !l.fragment));
+      }).length;
+      if (pend || bad) {
+        return ['wait', (pend ? pend + ' pending' : '') + (pend && bad ? ', ' : '') + (bad ? bad + ' unfinished' : '')];
+      }
+      return ['ok', doc.links.length + ' links'];
+    }
+    if (name === 'fragments') {
+      var used = doc.links.some(function (l) { return l.where === 'fragment'; });
+      if (!doc.fragments.length) return used ? ['wait', 'a link needs one'] : ['empty', 'none'];
+      var unnamed = doc.fragments.filter(function (f) { return !f.name; }).length;
+      return unnamed ? ['wait', 'unnamed'] : ['ok', doc.fragments.length + ' listed'];
+    }
+    if (name === 'tracking') {
+      if (doc.job.type !== 'SFMC') return ['ok', 'not applicable'];
+      return doc.tracking.included ? ['ok', 'included'] : ['ok', 'not included'];
+    }
+    if (name === 'alts') {
+      if (doc.altsPending) return ['wait', 'pending'];
+      if (!doc.alts.length) return ['ok', 'none stated'];
+      var half = doc.alts.filter(function (a) { return !collapse(a.text); }).length;
+      return half ? ['wait', 'blank rows'] : ['ok', doc.alts.length + ' stated'];
+    }
+    return ['empty', ''];
+  }
+
+  var SECTIONS = [
+    ['job', 'The job'], ['subjects', 'Subject lines'], ['preheaders', 'Preheaders'],
+    ['links', 'Links'], ['fragments', 'Fragments'], ['tracking', 'Tracking'],
+    ['alts', 'Alt text']
+  ];
+
+  function renderStatus() {
+    var rail = $('rail');
+    rail.innerHTML = '';
+    var waits = 0, empties = 0;
+    SECTIONS.forEach(function (pair) {
+      if (pair[0] === 'tracking' && doc.job.type !== 'SFMC') return;
+      var st = statusOf(pair[0]);
+      if (st[0] === 'wait') waits++;
+      if (st[0] === 'empty') empties++;
+      var li = el('li');
+      li.appendChild(el('span', 'mark ' + st[0]));
+      var a = el('a', null, pair[1]);
+      a.href = '#s-' + pair[0];
+      li.appendChild(a);
+      li.appendChild(el('span', 'pill ' + st[0], st[1]));
+      rail.appendChild(li);
+
+      var chip = $('p-' + pair[0]);
+      if (chip) { chip.className = 'pill ' + st[0]; chip.textContent = st[1]; }
+    });
+
+    var pill = $('overall'), hint = $('railhint');
+    if (empties && !doc.links.length) {
+      pill.className = 'pill empty'; pill.textContent = 'draft';
+      hint.textContent = 'Fill in the job first. It decides what the rest of the form asks for.';
+    } else if (waits || empties) {
+      pill.className = 'pill wait';
+      pill.textContent = 'draft · ' + (waits + empties) + ' to settle';
+      hint.textContent = 'You can download and come back. Anything marked pending is recorded as pending, with an owner, not left blank.';
+    } else {
+      pill.className = 'pill ok'; pill.textContent = 'ready';
+      hint.textContent = 'Every section is answered. Download the spec file and put it beside the email in the job folder.';
+    }
+
+    var j = doc.job;
+    $('jobline').textContent = (j.vp ? j.vp + ' · ' : '') + (j.veeva || 'no job yet') +
+      (j.brand ? ' · ' + j.brand : '') + (j.type ? ' · ' + j.type : '');
+    $('btn-download').textContent = (waits || empties) ? 'Download draft spec file' : 'Download spec file';
+  }
+
+  // countOnly updates the status without rebuilding inputs, so typing never loses focus
+  function countOnly() { renderStatus(); }
+
+  function render() {
+    renderTextList('subjects');
+    renderTextList('preheaders');
+    renderPending('subjects', 'Subject lines');
+    renderPending('preheaders', 'Preheaders');
+    renderPending('alts', 'Alt text');
+    renderLinks();
+    renderFragments();
+    renderAlts();
+    renderModes();
+    $('s-tracking').hidden = doc.job.type !== 'SFMC';
+    renderStatus();
+  }
+
+  function renderModes() {
+    ['preheaders'].forEach(function (n) {
+      Array.prototype.forEach.call($('mode-' + n).children, function (b) {
+        b.className = b.getAttribute('data-mode') === doc[n].mode ? 'on' : '';
+      });
+      $('mode-' + n + '-wrap').hidden = doc[n].options.length < 2;
+    });
+    Array.prototype.forEach.call($('mode-titleTags').children, function (b) {
+      b.className = b.getAttribute('data-mode') === doc.titleTags ? 'on' : '';
+    });
+  }
+
+  // ---------- job fields ----------
+  function bindJob(id, key, normalise, explain) {
+    var input = $(id), out = $('u-' + id.slice(2));
+    input.value = doc.job[key] || '';
+    input.addEventListener('input', function () { doc.job[key] = input.value; countOnly(); });
+    input.addEventListener('blur', function () {
+      var v = normalise ? normalise(input.value) : collapse(input.value);
+      var changed = v !== input.value.trim();
+      doc.job[key] = v; input.value = v;
+      if (out) {
+        out.innerHTML = changed && v ? 'Understood as <b>' + esc(v) + '</b>'
+          : (explain && !v ? explain : (out.getAttribute('data-fixed') || ''));
+      }
+      touch();
+    });
+  }
+
+  bindJob('f-veeva', 'veeva', function (v) {
+    return collapse(v).toUpperCase().replace(/\s*-\s*/g, '-');
+  });
+  bindJob('f-vp', 'vp', function (v) { return collapse(v).replace(/[^0-9]/g, ''); });
+  bindJob('f-brand', 'brand', collapse);
+  $('u-campaign').setAttribute('data-fixed', 'Written once here, then used on every link below.');
+  bindJob('f-campaign', 'campaign', function (v) { return slug(v); });
+
+  ['f-type', 'f-audience'].forEach(function (id) {
+    var s = $(id), key = id.slice(2);
+    s.value = doc.job[key] || '';
+    s.addEventListener('change', function () { doc.job[key] = s.value; touch(); });
+  });
+  $('f-tracking').addEventListener('change', function () {
+    doc.tracking.included = this.checked; touch();
+  });
+
+  // ---------- buttons ----------
+  document.addEventListener('click', function (e) {
+    var add = e.target.getAttribute && e.target.getAttribute('data-add');
+    if (add) {
+      if (add === 'subjects' || add === 'preheaders') {
+        var g = doc[add];
+        g.pending = null;
+        g.options.push({ text: '', default: !g.options.length });
+      } else if (add === 'links') {
+        doc.links.push({ desc: '', url: '', section: 'main', where: 'email', fragment: null, content: '', pending: null });
+      } else if (add === 'fragments') {
+        doc.fragments.push({ name: '', ownJob: false });
+      } else if (add === 'alts') {
+        doc.altsPending = null;
+        doc.alts.push({ location: '', text: '' });
+      }
+      touch();
+      var host = $('list-' + add);
+      var last = host.lastElementChild;
+      if (last) { var f = last.querySelector('input, textarea'); if (f) f.focus(); }
+      return;
+    }
+    var pend = e.target.getAttribute && e.target.getAttribute('data-pend');
+    if (pend) {
+      var cur = pend === 'alts' ? doc.altsPending : doc[pend].pending;
+      setPending(pend, cur ? null : { note: '', owner: '' });
+      return;
+    }
+    var mode = e.target.getAttribute && e.target.getAttribute('data-mode');
+    if (mode && e.target.parentNode) {
+      var which = e.target.parentNode.id.replace('mode-', '');
+      if (which === 'titleTags') doc.titleTags = mode; else doc[which].mode = mode;
+      touch();
+    }
+  });
+
+  // ---------- output ----------
+  function build() {
+    var out = {
+      schema: 1,
+      generated: new Date().toISOString(),
+      revision: (doc.revision || 0) + 1,
+      job: {
+        veeva: doc.job.veeva, vp: doc.job.vp, brand: doc.job.brand,
+        type: doc.job.type, audience: doc.job.audience
+      },
+      subjects: { mode: doc.subjects.mode, options: [] },
+      preheaders: { mode: doc.preheaders.mode, options: [] },
+      links: [], fragments: [], tracking: { included: !!doc.tracking.included },
+      alts: [], titleTags: doc.titleTags, pending: []
+    };
+
+    ['subjects', 'preheaders'].forEach(function (k) {
+      doc[k].options.forEach(function (o) {
+        if (!collapse(o.text)) return;
+        var row = { text: collapse(o.text) };
+        if (o.default) row.default = true;
+        out[k].options.push(row);
+      });
+      var p = doc[k].pending;
+      if (p) out.pending.push({ field: k, note: p.note || 'not known yet', owner: p.owner || '' });
+    });
+
+    doc.links.forEach(function (l, i) {
+      var id = 'l' + (i + 1);
+      if (l.pending) {
+        out.pending.push({ field: 'links[' + i + ']', note: l.pending.note || 'destination not known yet',
+                           owner: l.pending.owner || '' });
+        return;
+      }
+      if (!l.url) return;
+      var a = assemble(l);
+      out.links.push({
+        id: id, section: l.section || 'main', desc: collapse(l.desc),
+        functionality: '', url: l.url, utm: utmFor(l),
+        tagged: a ? a.full : l.url,
+        where: l.where || 'email',
+        fragment: l.where === 'fragment' ? (l.fragment || null) : null
+      });
+    });
+
+    doc.fragments.forEach(function (f) {
+      if (f.name) out.fragments.push({ name: f.name, ownJob: !!f.ownJob });
+    });
+    doc.alts.forEach(function (a) {
+      if (collapse(a.text)) out.alts.push({ location: collapse(a.location), text: collapse(a.text) });
+    });
+    if (doc.altsPending) {
+      out.pending.push({ field: 'alts', note: doc.altsPending.note || 'not decided yet',
+                         owner: doc.altsPending.owner || '' });
+    }
+    return out;
+  }
+
+  $('btn-download').addEventListener('click', function () {
+    var out = build();
+    doc.revision = out.revision;
+    touch();
+    var name = (doc.job.vp || doc.job.veeva || 'spec') + '.spec.json';
+    var blob = new Blob([JSON.stringify(out, null, 2)], { type: 'application/json' });
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = name;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 4000);
+    var b = this, old = b.textContent;
+    b.textContent = '✓ Saved as ' + name;
+    setTimeout(function () { b.textContent = old; renderStatus(); }, 2800);
+  });
+
+  $('btn-open').addEventListener('click', function () { $('file-open').click(); });
+  $('file-open').addEventListener('change', function () {
+    var f = this.files && this.files[0];
+    if (!f) return;
+    f.text().then(function (txt) {
+      var d = JSON.parse(txt);
+      doc = fromSpec(d);
+      touch();
+      window.scrollTo(0, 0);
+    }).catch(function () {
+      $('saved').textContent = 'That file could not be read as a spec file.';
+    });
+    this.value = '';
+  });
+
+  // reading our own output back is what makes save and return real
+  function fromSpec(d) {
+    var n = blank();
+    var j = d.job || {};
+    n.job = { veeva: j.veeva || '', vp: j.vp || '', brand: j.brand || '',
+              type: j.type || '', audience: j.audience || '',
+              campaign: (d.links && d.links[0] && d.links[0].utm && d.links[0].utm.campaign) || '' };
+    n.revision = d.revision || 0;
+    ['subjects', 'preheaders'].forEach(function (k) {
+      var g = d[k] || {};
+      n[k].mode = g.mode || 'one-of';
+      n[k].options = (g.options || []).map(function (o) {
+        return { text: o.text || '', default: !!o.default };
+      });
+    });
+    n.links = (d.links || []).map(function (l) {
+      return { desc: l.desc || '', url: l.url || '', section: l.section || 'main',
+               where: l.where || 'email', fragment: l.fragment || null,
+               content: (l.utm && l.utm.content) || '', pending: null };
+    });
+    n.fragments = (d.fragments || []).map(function (f) { return { name: f.name || '', ownJob: !!f.ownJob }; });
+    n.tracking = { included: !!(d.tracking && d.tracking.included) };
+    n.alts = (d.alts || []).map(function (a) { return { location: a.location || '', text: a.text || '' }; });
+    n.titleTags = d.titleTags || 'allowed';
+    (d.pending || []).forEach(function (p) {
+      var box = { note: p.note || '', owner: p.owner || '' };
+      if (p.field === 'subjects') n.subjects.pending = box;
+      else if (p.field === 'preheaders') n.preheaders.pending = box;
+      else if (p.field === 'alts') n.altsPending = box;
+      else {
+        var m = /^links\[(\d+)\]$/.exec(p.field || '');
+        if (m) {
+          var i = parseInt(m[1], 10);
+          while (n.links.length <= i) n.links.push({ desc: '', url: '', section: 'main', where: 'email', fragment: null, content: '', pending: null });
+          n.links[i].pending = box;
+        }
+      }
+    });
+    return n;
+  }
+
+  $('btn-clear').addEventListener('click', function () {
+    if (this.getAttribute('data-armed')) {
+      try { localStorage.removeItem(KEY); } catch (e) {}
+      doc = blank();
+      ['f-veeva', 'f-vp', 'f-brand', 'f-campaign'].forEach(function (id) { $(id).value = ''; });
+      ['f-type', 'f-audience'].forEach(function (id) { $(id).value = ''; });
+      $('f-tracking').checked = false;
+      this.removeAttribute('data-armed');
+      this.textContent = 'Start over';
+      touch();
+      return;
+    }
+    this.setAttribute('data-armed', '1');
+    this.textContent = 'Click again to erase this draft';
+    var b = this;
+    setTimeout(function () { b.removeAttribute('data-armed'); b.textContent = 'Start over'; }, 4000);
+  });
+
+  // ---------- start ----------
+  if (restore()) {
+    ['veeva', 'vp', 'brand', 'campaign'].forEach(function (k) { $('f-' + k).value = doc.job[k] || ''; });
+    $('f-type').value = doc.job.type || '';
+    $('f-audience').value = doc.job.audience || '';
+    $('f-tracking').checked = !!doc.tracking.included;
+    $('saved').textContent = 'Picked up where you left off.';
+  } else {
+    doc.subjects.options.push({ text: '', default: true });
+    doc.preheaders.options.push({ text: '', default: true });
+    doc.links.push({ desc: '', url: '', section: 'main', where: 'email', fragment: null, content: '', pending: null });
+  }
+  render();
+})();
+</script>
+</body>
+</html>
