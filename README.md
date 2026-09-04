@@ -49,7 +49,9 @@ Links that are on the spec sheet but **not in the build** are listed in the pane
 
 Open the **Links** line for the checklist. It is always split into **Not done** and **Done**, so your progress reads the same whether your eye is on the email or on the panel. Under the Not done group, **Outline these in email** puts a dashed red outline on exactly those links, image buttons included, for when you want to find them on the page. Press it again to clear the outlines.
 
-**Clear all** at the foot starts the pass again.
+The first row of the checklist says how much of the sheet you are looking at, `10 links, 9 on the sheet, 1 email only`. The line above it counts your progress, this counts the coverage. The Alt text list carries the same row.
+
+**Restart proof** at the foot clears every mark on this job, fragment links included. It asks for a second click first, because a long job is a lot of ticks to lose.
 
 What you mark done is remembered per job. Two builds with the same links, the state variants for example, share that, and the box tells you which file it was done on. Change a link and its mark clears itself, so a mark never covers a URL nobody looked at.
 
@@ -102,6 +104,8 @@ These two only appear when the spec sheet carries an alt text list. Nothing to s
 - **email only.** In the build, on no sheet row. Amber. This is alt drift.
 
 A call to action built as a live text button carries no image, so it carries no alt. The sheet still lists its copy, because the alt tab gets filled in while the design is only being anticipated. The words are in the build, as the button's own text, and a reader with images off sees them, which is the thing an alt exists to guarantee. So the row is satisfied and says which ones were. This works one way only: button text can answer a row the sheet already asks for, never add one.
+
+Click any alt text row and the tool scrolls that image into view, flashes it and opens a box with the copy, where it was found, and Copy. Next steps to the one after it, the same as the link box. Images the alt list covers are outlined, green when they match the sheet and amber for copy the sheet does not carry. There is no Mark done here, because alt copy is compared rather than clicked through.
 
 **Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
 
