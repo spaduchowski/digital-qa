@@ -107,7 +107,7 @@ A call to action built as a live text button carries no image, so it carries no 
 
 Click any alt text row and the tool scrolls that image into view, flashes it and opens a box with the copy and where it was found. Copy, Mark done and Next work as they do on a link. Open is absent, since alt text has no destination.
 
-Mark it done once you have checked the copy against the image. The tool compares the words exactly. What it cannot tell you is whether the right alt is on the right image, and that is what you are confirming. Outlines follow the link rule: red dashed until marked, green once marked, amber for copy the sheet does not carry.
+Mark it done once you have checked the copy against the image. The tool compares the words exactly. What it cannot tell you is whether the right alt is on the right image, and that is what you are confirming. Outlines follow the link rule: red dashed until marked, green once marked, amber for copy the sheet does not carry. An image that is also a link carries both checks, and one outline reports both, so it turns green only once its link and its alt are both marked. While one is outstanding the box says which.
 
 **Title tags** reports any `title` attribute in the build. A sheet that states its alt copy exactly comes from a client who cares what text hangs off an image, so the tool treats a title attribute as unwanted and lists every one it finds. The row reads `none, as required` when the build is clean.
 
