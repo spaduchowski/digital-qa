@@ -134,7 +134,7 @@ Every row says which side it came from, so you can see at a glance what is cover
 
 ### What is not checked
 
-- **Phone, email and in-page links.** Skipped, because no spec sheet covers them.
+- **Phone and in-page links.** Skipped, because no spec sheet covers them. Email address links are checked, but have no Open, since opening one hands your mail client a blank message.
 - **Subject lines.** They live in the sending platform, not in the HTML.
 - **Whether a destination loads.** No bookmarklet can answer that. A live page and a dead one look identical to it. That is what **Open** is for, and why the done marks exist.
 
