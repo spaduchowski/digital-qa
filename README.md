@@ -41,6 +41,8 @@ For a button made of an image, the box also shows its **alt text**, the only thi
 
 Only problems get outlined, so an outline always means look here.
 
+Or work from the panel. **Click any row in the Links list** and the tool scrolls that link into view, flashes it, and opens its box. You never have to hunt for a link in a long email.
+
 Links that are on the spec sheet but **not in the build** are listed in the panel. There is nothing to click, so this is the one thing clicking through can never find.
 
 Open the **Links** line for the checklist. It is always split into **Not done** and **Done**, so your progress reads the same whether your eye is on the email or on the panel. Under the Not done group, **Outline these in email** puts a dashed red outline on exactly those links, image buttons included, for when you want to find them on the page. Press it again to clear the outlines.
